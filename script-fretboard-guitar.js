@@ -23,30 +23,33 @@ var note2 = {
     g: ["G", "Ab", "A", "Bb", "B", "C", "Db", "D", "Eb", "E", "F", "Gb", "G"],
     b: ["B", "C", "Db", "D", "Eb", "E", "F", "Gb", "G", "Ab", "A", "Bb", "B"],
 };
-
+var currentFret = 6;
 $(".dropdown #down").click(function () {
     if (!canClick) {
         return false;
     }
     canClick = false;
 
-    $(".mask").each(function () {
-        var el = $(this);
-        var nextNote = el.find("li:nth-child(12)").text();
+    // $(".mask").each(function () {
+    //     var el = $(this);
+    //     var nextNote = el.find("li:nth-child(12)").text();
 
-        el.animate({ top: 80 }, slideSpeed);
-        setTimeout(function () {
-            el.find("ul").prepend(
-                "<li note=" + nextNote + ">" + nextNote + "</li>"
-            );
-            el.find("li:last-child").remove();
-            el.css({ top: 0 });
-        }, slideSpeed + 20);
-    });
-
+    //     el.animate({ top: 80 }, slideSpeed);
+    //     setTimeout(function () {
+    //         el.find("ul").prepend(
+    //             "<li note=" + nextNote + ">" + nextNote + "</li>"
+    //         );
+    //         el.find("li:last-child").remove();
+    //         el.css({ top: 0 });
+    //     }, slideSpeed + 20);
+    // });
+    // changeOpenNotes();
+    // showNotes(noteToShow);
+    // $(".dropdown #down").attr('href', `.guitar-neck #fret-${currentFret}`);
+    // $(".dropdown #down").click();
+    currentFret++;
+    console.log(currentFret);
     setTimeout(function () {
-        changeOpenNotes();
-        showNotes(noteToShow);
         canClick = true;
     }, slideSpeed + 20);
 
@@ -59,20 +62,20 @@ $(".dropdown #up").click(function () {
     }
     canClick = false;
 
-    $(".mask").each(function () {
-        var el = $(this);
-        var nextNote = el.find("li:nth-child(2)").text();
+    // $(".mask").each(function () {
+    //     var el = $(this);
+    //     var nextNote = el.find("li:nth-child(2)").text();
 
-        $("<li note=" + nextNote + ">" + nextNote + "</li>").appendTo(
-            el.find("ul")
-        );
-        el.css({ top: 80 });
-        el.find("li:first-child").remove();
-        el.animate({ top: 0 }, slideSpeed);
-    });
+    //     $("<li note=" + nextNote + ">" + nextNote + "</li>").appendTo(
+    //         el.find("ul")
+    //     );
+    //     el.css({ top: 80 });
+    //     el.find("li:first-child").remove();
+    //     el.animate({ top: 0 }, slideSpeed);
+    // });
+    // changeOpenNotes();
+    // showNotes(noteToShow);
 
-    changeOpenNotes();
-    showNotes(noteToShow);
 
     setTimeout(function () {
         canClick = true;
