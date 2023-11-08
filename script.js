@@ -2,8 +2,6 @@
 // const $$ = document.querySelectorAll.bind(document);
 // console.log($);
 
-const chordTab = ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"];
-
 document.querySelectorAll("div.tab").forEach((x) => {
 	const Tab_Stripe = x.querySelector(".tab-stripe");
 	const Tab_Content = x.querySelector(".tab-content");
@@ -35,8 +33,10 @@ document.querySelectorAll("div.tab").forEach((x) => {
 		(x, index) =>
 			(x.onclick = (e) => {
 				noteToShow = chordTab[index];
-				showNotes(noteToShow);
 				SetTab(index);
+				currentTab = index;
+				// resetNote();
+				showNotes(noteToShow);
 				e.preventDefault();
 			})
 	);

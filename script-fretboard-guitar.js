@@ -4,9 +4,11 @@ const TYPES_CONTROL = {
     CHORD: "CHORD",
 };
 // Process Note
+const chordTab = ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"];
 var noteToShow = "C";
 var canClick = true;
 var switchGuitar = false;
+var currentTab = 0;
 var notes = {
     e: ["E", "F", "F#", "G", "G#", "A", "A#", "B", "C", "C#", "D", "D#", "E"],
     a: ["A", "A#", "B", "C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A"],
@@ -20,8 +22,7 @@ var note2 = {
     d: ["D", "Eb", "E", "F", "Gb", "G", "Ab", "A", "Bb", "B", "C", "Db", "D"],
     g: ["G", "Ab", "A", "Bb", "B", "C", "Db", "D", "Eb", "E", "F", "Gb", "G"],
     b: ["B", "C", "Db", "D", "Eb", "E", "F", "Gb", "G", "Ab", "A", "Bb", "B"],
-}
-
+};
 
 $(".dropdown #down").click(function () {
     if (!canClick) {
@@ -112,6 +113,29 @@ function changeOpenNotes() {
     });
 }
 // Process chords
+function resetNote() {
+    $(".mask ul").text("");
+    for (var i = 0; i < notes.e.length; i++) {
+        $(".mask.low-e ul").append(
+            '<li note="' + notes.e[i] + '">' + notes.e[i] + "</li>"
+        );
+        $(".mask.a ul").append(
+            '<li note="' + notes.a[i] + '">' + notes.a[i] + "</li>"
+        );
+        $(".mask.d ul").append(
+            '<li note="' + notes.d[i] + '">' + notes.d[i] + "</li>"
+        );
+        $(".mask.g ul").append(
+            '<li note="' + notes.g[i] + '">' + notes.g[i] + "</li>"
+        );
+        $(".mask.b ul").append(
+            '<li note="' + notes.b[i] + '">' + notes.b[i] + "</li>"
+        );
+        $(".mask.high-e ul").append(
+            '<li note="' + notes.e[i] + '">' + notes.e[i] + "</li>"
+        );
+    }
+}
 const chords = {
     majors: [
         {
@@ -382,37 +406,26 @@ function showmenu() {
     $("#selector .dropdown-content").show();
 }
 $("#selector .dropdown-content #notes").on("click", () => {
-	$("#selector .dropbtn img").attr("src", "./img/note.png");
+    $("#selector .dropbtn img").attr("src", "./img/note.png");
     $(".dropdown #chord-class").css("visibility", "hidden");
-    showNotes('All');
+    showNotes(chordTab[currentTab]);
 });
-$("#selector .dropdown-content #chords").on("click",async () => {
-	$("#selector .dropbtn img").attr("src", "./img/chord.png");
+$("#selector .dropdown-content #chords").on("click", async () => {
+    $("#selector .dropbtn img").attr("src", "./img/chord.png");
     $(".dropdown #chord-class").css("visibility", "unset");
     await showChordNumber();
-
 });
 
-$(".dropdown .switch input").change( () => {
-    alert('hii')
-    if(!switchGuitar) {
-        let temp = notes;
-        notes = note2;
-        note2 = temp;
-        $('.mask ul').text('');
-        for (var i = 0; i < notes.e.length; i++) {
-            $('.mask.low-e ul').append('<li note="' + notes.e[i] + '">' + notes.e[i] + '</li>')
-            $('.mask.a ul').append('<li note="' + notes.a[i] + '">' + notes.a[i] + '</li>')
-            $('.mask.d ul').append('<li note="' + notes.d[i] + '">' + notes.d[i] + '</li>')
-            $('.mask.g ul').append('<li note="' + notes.g[i] + '">' + notes.g[i] + '</li>')
-            $('.mask.b ul').append('<li note="' + notes.b[i] + '">' + notes.b[i] + '</li>')
-            $('.mask.high-e ul').append('<li note="' + notes.e[i] + '">' + notes.e[i] + '</li>')
-        }
-        showNotes('C');
-    }else {
-    }
-    switchGuitar = !switchGuitar;
-})
+$(".dropdown .switch input").change(() => {
+    // alert('hii')
+
+    let temp = notes;
+    notes = note2;
+    note2 = temp;
+    resetNote();
+    showNotes(chordTab[currentTab]);
+    changeOpenNotes();
+});
 
 $(function () {
     var $win = $(window),
