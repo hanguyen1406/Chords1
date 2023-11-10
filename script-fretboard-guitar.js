@@ -49,6 +49,7 @@ $(".dropdown #down").click(function () {
     // $(".dropdown #down").click();
     currentFret++;
     console.log(currentFret);
+    document.querySelector("#fret7").scrollIntoView({ behavior: 'smooth'});
     setTimeout(function () {
         canClick = true;
     }, slideSpeed + 20);
