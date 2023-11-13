@@ -1,7 +1,3 @@
-// const $ = document.querySelector.bind(document);
-// const $$ = document.querySelectorAll.bind(document);
-// console.log($);
-
 document.querySelectorAll("div.tab").forEach((x) => {
 	const Tab_Stripe = x.querySelector(".tab-stripe");
 	const Tab_Content = x.querySelector(".tab-content");
@@ -32,7 +28,7 @@ document.querySelectorAll("div.tab").forEach((x) => {
 	Tab_Stripe_a.forEach(
 		(x, index) =>
 			(x.onclick = (e) => {
-				noteToShow = chordTab[index];
+				noteToShow = chordTab1[index];
 				SetTab(index);
 				currentTab = index;
 				// resetNote();

@@ -4,7 +4,34 @@ const TYPES_CONTROL = {
     CHORD: "CHORD",
 };
 // Process Note
-const chordTab = ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"];
+var chordTab1 = [
+    "C",
+    "C#",
+    "D",
+    "D#",
+    "E",
+    "F",
+    "F#",
+    "G",
+    "G#",
+    "A",
+    "A#",
+    "B",
+];
+var chordTab2 = [
+    "C",
+    "Db",
+    "D",
+    "Eb",
+    "E",
+    "F",
+    "Gb",
+    "G",
+    "Ab",
+    "A",
+    "Bb",
+    "B",
+];
 var noteToShow = "C";
 var canClick = true;
 var switchGuitar = false;
@@ -23,33 +50,12 @@ var note2 = {
     g: ["G", "Ab", "A", "Bb", "B", "C", "Db", "D", "Eb", "E", "F", "Gb", "G"],
     b: ["B", "C", "Db", "D", "Eb", "E", "F", "Gb", "G", "Ab", "A", "Bb", "B"],
 };
-var currentFret = 6;
 $(".dropdown #down").click(function () {
     if (!canClick) {
         return false;
     }
     canClick = false;
-
-    // $(".mask").each(function () {
-    //     var el = $(this);
-    //     var nextNote = el.find("li:nth-child(12)").text();
-
-    //     el.animate({ top: 80 }, slideSpeed);
-    //     setTimeout(function () {
-    //         el.find("ul").prepend(
-    //             "<li note=" + nextNote + ">" + nextNote + "</li>"
-    //         );
-    //         el.find("li:last-child").remove();
-    //         el.css({ top: 0 });
-    //     }, slideSpeed + 20);
-    // });
-    // changeOpenNotes();
-    // showNotes(noteToShow);
-    // $(".dropdown #down").attr('href', `.guitar-neck #fret-${currentFret}`);
-    // $(".dropdown #down").click();
-    currentFret++;
-    console.log(currentFret);
-    document.querySelector("#fret7").scrollIntoView({ behavior: 'smooth'});
+    document.querySelector("#fret7").scrollIntoView({ behavior: "smooth" });
     setTimeout(function () {
         canClick = true;
     }, slideSpeed + 20);
@@ -63,20 +69,7 @@ $(".dropdown #up").click(function () {
     }
     canClick = false;
 
-    // $(".mask").each(function () {
-    //     var el = $(this);
-    //     var nextNote = el.find("li:nth-child(2)").text();
-
-    //     $("<li note=" + nextNote + ">" + nextNote + "</li>").appendTo(
-    //         el.find("ul")
-    //     );
-    //     el.css({ top: 80 });
-    //     el.find("li:first-child").remove();
-    //     el.animate({ top: 0 }, slideSpeed);
-    // });
-    // changeOpenNotes();
-    // showNotes(noteToShow);
-
+    document.querySelector("#fret0").scrollIntoView({ behavior: "smooth" });
 
     setTimeout(function () {
         canClick = true;
@@ -121,22 +114,46 @@ function resetNote() {
     $(".mask ul").text("");
     for (var i = 0; i < notes.e.length; i++) {
         $(".mask.low-e ul").append(
-            '<li note="' + notes.e[i] + '">' + notes.e[i] + "</li>"
+            '<li note="' +
+                notes.e[i] +
+                '" style="opacity: 0;">' +
+                notes.e[i] +
+                "</li>"
         );
         $(".mask.a ul").append(
-            '<li note="' + notes.a[i] + '">' + notes.a[i] + "</li>"
+            '<li note="' +
+                notes.a[i] +
+                '" style="opacity: 0;">' +
+                notes.a[i] +
+                "</li>"
         );
         $(".mask.d ul").append(
-            '<li note="' + notes.d[i] + '">' + notes.d[i] + "</li>"
+            '<li note="' +
+                notes.d[i] +
+                '" style="opacity: 0;">' +
+                notes.d[i] +
+                "</li>"
         );
         $(".mask.g ul").append(
-            '<li note="' + notes.g[i] + '">' + notes.g[i] + "</li>"
+            '<li note="' +
+                notes.g[i] +
+                '" style="opacity: 0;">' +
+                notes.g[i] +
+                "</li>"
         );
         $(".mask.b ul").append(
-            '<li note="' + notes.b[i] + '">' + notes.b[i] + "</li>"
+            '<li note="' +
+                notes.b[i] +
+                '" style="opacity: 0;">' +
+                notes.b[i] +
+                "</li>"
         );
         $(".mask.high-e ul").append(
-            '<li note="' + notes.e[i] + '">' + notes.e[i] + "</li>"
+            '<li note="' +
+                notes.e[i] +
+                '" style="opacity: 0;">' +
+                notes.e[i] +
+                "</li>"
         );
     }
 }
@@ -412,7 +429,7 @@ function showmenu() {
 $("#selector .dropdown-content #notes").on("click", () => {
     $("#selector .dropbtn img").attr("src", "./img/note.png");
     $(".dropdown #chord-class").css("visibility", "hidden");
-    showNotes(chordTab[currentTab]);
+    showNotes(chordTab1[currentTab]);
 });
 $("#selector .dropdown-content #chords").on("click", async () => {
     $("#selector .dropbtn img").attr("src", "./img/chord.png");
@@ -423,12 +440,16 @@ $("#selector .dropdown-content #chords").on("click", async () => {
 $(".dropdown .switch input").change(() => {
     // alert('hii')
 
-    let temp = notes;
+    let temp1 = notes,
+        temp2 = chordTab1;
     notes = note2;
-    note2 = temp;
+    note2 = temp1;
+
+    chordTab1 = chordTab2;
+    chordTab2 = temp2;
+
     resetNote();
-    showNotes(chordTab[currentTab]);
-    changeOpenNotes();
+    showNotes(chordTab1[currentTab]);
 });
 
 $(function () {

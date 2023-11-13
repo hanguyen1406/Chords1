@@ -6,14 +6,15 @@
     border: #bbb 1px solid;
     margin: 3px;
     display: block;
-    font-size: 17px;
+    font-size: 16px;
     text-align: center;
     border-radius: 7px;
     background-color: #276091;
     color: white;
-    padding: 1px;
+    padding: 0px 1px 0px 1px;
     text-decoration: none;
     box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;
+    width: 100%;
 }
 .switch {
     display: inline-block;
@@ -68,8 +69,9 @@
 .dropdown {
     position: relative;
     display: inline-block;
-    margin-bottom: 2px;
-    top: -14px;
+    top: -45px;
+    width: 16%;
+    max-width: 70px;
 }
 
 .dropdown-content {
@@ -123,7 +125,8 @@ div.tab {
     display: block;
     width: 100%;
     max-width: 800px;
-    height: 700px; /* 500px */
+    height: fit-content;
+    padding-bottom: 35px;
     background: #fff;
     margin: 10px auto 50px; /* TMP */
     border: 2.5px solid #bbb;
