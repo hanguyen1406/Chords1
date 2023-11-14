@@ -115,19 +115,19 @@ h1 {
 }
 .guitar-neck .dots {
     position: absolute;
-    width: 20px;
+    width: 99.5%;
     height: 760px;
     top: 240px;
-    left: 48%;
-    overflow: hidden;
+    padding: 0px;
 }
 .guitar-neck .dots li {
-    float: left;
     width: 20px;
     height: 20px;
     border-radius: 50%;
     background: #383530;
     margin-bottom: 140px;
+    margin-left:46%;
+   
 }
 .guitar-neck .strings {
     position: absolute;
@@ -208,7 +208,7 @@ h1 {
     box-shadow: 0px 3px 5px 0px rgba(0, 0, 0, 0.75);
 }
 .guitar-neck .compartment-number {
-    position: absolute;
+    position: relative;
     top: 65px;
     left: -20px;
 }

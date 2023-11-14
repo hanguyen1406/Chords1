@@ -69,7 +69,7 @@
 .dropdown {
     position: relative;
     display: inline-block;
-    top: -45px;
+    top: -42px;
     width: 16%;
     max-width: 70px;
 }
@@ -190,7 +190,7 @@ div.tab > nav.tab-stripe::-webkit-scrollbar-thumb {
 div.tab > nav.tab-stripe > a {
     display: flex;
     align-items: center;
-    font-size: 24px;
+    font-size: 20px;
     text-decoration: none;
     color: #000;
     letter-spacing: -2px; /* TMP */
