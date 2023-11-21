@@ -24,26 +24,51 @@ h1 {
     justify-content: center;
     display: grid;
 }
+.tab-content #popup-menu {
+    width: 90%;
+    height: 60%;
+    position: absolute;
+    background-color: #eee;
+    z-index: 6;
+    max-width: 400px;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    border-radius: 5%;
+    display: none;
+    opacity: 0;
+    box-shadow: rgba(0, 0, 0, 0.19) 0px 10px 20px, rgba(0, 0, 0, 0.23) 0px 6px 6px;
+}
+.tab-content .child {
+    margin-top: 20px; /* Just for separation in the example */
+}
+
+.tab-content .position-right {
+    position: absolute;
+    top: 5px; 
+    right: 8px; 
+    color: #211f1d; 
+    text-decoration: none;
+}
 .fretboard {
-    /* margin-left: 50px; */
     max-width: 260px;
-    width: 80%;
+    width: 75%;
     height: 460px;
     overflow-y: scroll;
     overflow-x: hidden;
-    padding-right: 15px;
+    /* padding-right: 20px; */
     display: inline-block;
+    padding-left: 27px;
 }
 .tabs-control {
     width: 100%;
     display: flex;
     justify-content: center;
-
 }
 
 .tabs-control li[tab-name] {
     cursor: pointer;
-    font-size: 24px;
+    /* font-size: 24px; */
     font-weight: 500;
     padding: 0 25px;
 }
@@ -73,7 +98,7 @@ h1 {
 .guitar-neck {
     position: relative;
     /* left: 35%; */
-    width: 110%;
+    width: 100%;
     height: 1010px;
     background: #755628;
     box-shadow: inset -1px 0px 11px 0px rgba(0, 0, 0, 0.75);
@@ -81,19 +106,17 @@ h1 {
 .guitar-neck .open-notes {
     position: relative;
     top: -1000px;
-    left: -12px;
+    left: -11px;
     z-index: 4;
     display: flex;
     justify-content: space-between;
-    width: 98%;
+    width: 102%;
 }
 
 .guitar-neck .open-notes li {
     font-size: 18px;
     color: #fff;
-    
 }
-
 
 .guitar-neck .open-notes li.active {
     color: #fa990f;
@@ -126,24 +149,22 @@ h1 {
     border-radius: 50%;
     background: #383530;
     margin-bottom: 140px;
-    margin-left:46%;
-   
+    margin-left: 48%;
 }
 .guitar-neck .strings {
     position: absolute;
     left: -10px;
     top: 0px;
-    width: 95%;
+    width: 98.5%;
     height: 100%;
-    display:flex;
-    justify-content:space-between
+    display: flex;
+    justify-content: space-between;
 }
 .guitar-neck .strings li {
     width: 6px;
     display: inline-block;
     height: 1010px;
     background: #c8bb93;
-    margin-right: 35px;
     border-top: 2px solid #958963;
     box-sizing: border-box;
 }
@@ -166,14 +187,13 @@ h1 {
 .guitar-neck .notes {
     position: absolute;
     top: -8px;
-    width: 97%;
+    width: 100%;
     height: 1010px;
     overflow-y: hidden;
     overflow-x: hidden;
-    left: 0px;
-    display:flex;
-    justify-content:space-between;
-    /* z-index: 3; */
+    left: 1px;
+    display: flex;
+    justify-content: space-between;
 }
 .guitar-neck .notes .mask {
     /* position: absolute; */
@@ -181,15 +201,16 @@ h1 {
     height: fit-content;
     margin: 0;
 }
-.guitar-neck .notes .mask:nth-child(2) {
-    margin-left: 1px;
-}
+/* .guitar-neck .notes .mask:nth-child(2) {
+    margin-left: 0px;
+} */
 .guitar-neck .notes .mask:nth-child(3) {
-    margin-left: 2px;
+    margin-left: 4px;
 }
-.guitar-neck .notes .mask:nth-child(5) {
-    margin-left: 2px;
-}
+/* .guitar-neck .notes .mask:nth-child(4) {
+    margin-left: 1px;
+} */
+
 .guitar-neck .notes .mask ul {
     position: relative;
     padding: 0;
@@ -204,19 +225,22 @@ h1 {
     color: #fff;
     border-radius: 50%;
     text-align: center;
-    line-height: 30px;
+    line-height: 28px;
     box-shadow: 0px 3px 5px 0px rgba(0, 0, 0, 0.75);
 }
 .guitar-neck .compartment-number {
-    position: relative;
-    top: 65px;
-    left: -20px;
+    position: absolute;
+    top: 70px;
+    left: -22px;
+    z-index: 5;
+    padding: 0px;
 }
 
 .guitar-neck .compartment-number li {
-    font-size: 30px;
+    font-size: 20px;
     font-weight: 700;
-    margin-bottom: 45px;
+    margin-bottom: 52.5px;
+    text-align: right;
 }
 
 .guitar-neck .compartment-number li:nth-child(1) {
