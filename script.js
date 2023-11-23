@@ -26,14 +26,23 @@ document.querySelectorAll("div.tab").forEach((x) => {
 
     Tab_Stripe_a.forEach(
         (x, index) =>
-            (x.onclick = (e) => {
+            (x.onclick = async (e) => {
                 noteToShow = chordTab1[index];
                 SetTab(index);
                 if (floatingMenu === "note") {
                     showNotes(noteToShow);
                 } else if (floatingMenu === "chord") {
-                    chordActive = chords[noteToShow][0];
-                    showNoteMode()
+                    console.log("note: " + noteToShow);
+                    await fetch(`./chords/${noteToShow.replace('#','sharp')}/major.json`)
+                        .then((response) => response.json())
+                        .then((data) => {
+                            console.log(data);
+                            chordActive = data["positions"][0];
+                            showNoteMode();
+                        })
+                        .catch((error) => {
+                            console.error("Error fetching data:", error);
+                        });
                 } else {
                 }
                 currentTab = index;

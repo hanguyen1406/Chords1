@@ -4,15 +4,6 @@ const TYPES_CONTROL = {
     CHORD: "CHORD",
 };
 
-fetch("major.json")
-    .then((response) => response.json())
-    .then((data) => {
-        console.log(data); // Process the fetched data here
-    })
-    .catch((error) => {
-        console.error("Error fetching data:", error);
-    });
-
 var chordTab1 = [
     "C",
     "C#",
@@ -42,7 +33,10 @@ var chordTab2 = [
     "B",
 ];
 var noteToShow = "C";
-var chordActive = chords["C"][0];
+var chordActive = {
+    "frets": "x32010",
+    "fingers": "032010"
+  }
 var canClick = true;
 var switchGuitar = false;
 var currentTab = 0;
@@ -193,7 +187,6 @@ const showChordNumber = (chordSymbol) => {
 };
 
 const showNoteMode = () => {
-    // console.log("show note mode: " + chordActive);
     if (!canClick) return;
 
     if (1) {
@@ -210,11 +203,11 @@ const showNoteMode = () => {
                 ".mask.b",
                 ".mask.high-e",
             ];
-            chordActive["positions"][0]["frets"].forEach((fret, index) => {
+            [...chordActive["frets"]].forEach((fret, index) => {
                 console.log(fret);
-                if (fret > 0) {
+                if (fret != 'x' && fret != '0') {
                     $(
-                        `.notes ${notesClassName[index]} ul li[note-number="${fret}"]`
+                        `.notes ${notesClassName[index]} ul li[note-number="${parseInt(fret, 16)}"]`
                     ).animate({ opacity: 1 }, 500);
                 }
             });
