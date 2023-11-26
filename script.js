@@ -29,15 +29,27 @@ document.querySelectorAll("div.tab").forEach((x) => {
             (x.onclick = async (e) => {
                 noteToShow = chordTab1[index];
                 SetTab(index);
+                document
+                    .querySelector("#fret0")
+                    .scrollIntoView({ behavior: "smooth" });
+                $(".tab-content #chord-version").text(1);
+                $(".tab-content #chord-name #chord").text(noteToShow);
+                currentFret = chordVersion = 0;
+
                 if (floatingMenu === "note") {
                     showNotes(noteToShow);
                 } else if (floatingMenu === "chord") {
-                    console.log("note: " + noteToShow);
-                    await fetch(`./chords/${noteToShow.replace('#','sharp')}/major.json`)
+                    // console.log("note: " + noteToShow);
+                    await fetch(
+                        `./chords/${noteToShow.replace(
+                            "#",
+                            "sharp"
+                        )}/major.json`
+                    )
                         .then((response) => response.json())
                         .then((data) => {
-                            console.log(data);
-                            chordActive = data["positions"][0];
+                            // console.log(data);
+                            chordActive = data["positions"];
                             showNoteMode();
                         })
                         .catch((error) => {
@@ -45,6 +57,7 @@ document.querySelectorAll("div.tab").forEach((x) => {
                         });
                 } else {
                 }
+                chordVersion = 0;
                 currentTab = index;
                 e.preventDefault();
             })
