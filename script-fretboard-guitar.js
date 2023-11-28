@@ -77,7 +77,7 @@ var note2 = {
     g: ["G", "Ab", "A", "Bb", "B", "C", "Db", "D", "Eb", "E", "F", "Gb", "G"],
     b: ["B", "C", "Db", "D", "Eb", "E", "F", "Gb", "G", "Ab", "A", "Bb", "B"],
 };
-
+var openNote = ["E", "A", "D", "G", "B", "E"];
 //render notes
 $(".notes .mask ul").text("");
 for (let i = 0; i < notes.e.length; i++) {
@@ -237,9 +237,32 @@ const showNoteMode = () => {
                 ".mask.high-e",
             ];
             [...chordActive[chordVersion]["frets"]].forEach((fret, index) => {
-                // console.log(fret);
-                if (fret != "x" && fret != "0") {
+                console.log(fret);
+                if (fret == "x") {
+                    $(`#indicate ${notesClassName[index].replace(".mask", "")}`)
+                        .text("X")
+                        .css({
+                            color: "#f00",
+                            "background-color": "#fa990f",
+                        })
+                        .animate(500);
+                } else if (fret == "0") {
+                    $(`#indicate ${notesClassName[index].replace(".mask", "")}`)
+                        .text(openNote[index])
+                        .css({
+                            color: "#fff",
+                            "background-color": "#fa990f",
+                        })
+                        .animate(500);
+                } else if (fret != "x" && fret != "0") {
                     fret = parseInt(fret, 16);
+                    $(`#indicate ${notesClassName[index].replace(".mask", "")}`)
+                        .text(openNote[index])
+                        .css({
+                            color: "rgb(134 124 108)",
+                            "background-color": "rgb(254 244 229)",
+                        })
+                        .animate(500);
                     currentFret = Math.min(currentFret, fret);
                     $(
                         `.notes ${notesClassName[index]} ul li[note-number="${fret}"]`
