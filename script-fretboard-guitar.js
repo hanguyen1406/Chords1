@@ -78,64 +78,15 @@ var note2 = {
     b: ["B", "C", "Db", "D", "Eb", "E", "F", "Gb", "G", "Ab", "A", "Bb", "B"],
 };
 var openNote = ["E", "A", "D", "G", "B", "E"];
+var giang = {
+    Db: "C#",
+    Eb: "D#",
+    Gb: "F#",
+    Ab: "G#",
+    Bb: "A#",
+};
 //render notes
-$(".notes .mask ul").text("");
-for (let i = 0; i < notes.e.length; i++) {
-    $(".mask.low-e ul").append(
-        "<li note-number=" +
-            i +
-            " note=" +
-            notes.e[i] +
-            ">" +
-            notes.e[i] +
-            "</li>"
-    );
-    $(".mask.a ul").append(
-        "<li note-number=" +
-            i +
-            " note=" +
-            notes.a[i] +
-            ">" +
-            notes.a[i] +
-            "</li>"
-    );
-    $(".mask.d ul").append(
-        "<li note-number=" +
-            i +
-            " note=" +
-            notes.d[i] +
-            ">" +
-            notes.d[i] +
-            "</li>"
-    );
-    $(".mask.g ul").append(
-        "<li note-number=" +
-            i +
-            " note=" +
-            notes.g[i] +
-            ">" +
-            notes.g[i] +
-            "</li>"
-    );
-    $(".mask.b ul").append(
-        "<li note-number=" +
-            i +
-            " note=" +
-            notes.b[i] +
-            ">" +
-            notes.b[i] +
-            "</li>"
-    );
-    $(".mask.high-e ul").append(
-        "<li note-number=" +
-            i +
-            " note=" +
-            notes.e[i] +
-            ">" +
-            notes.e[i] +
-            "</li>"
-    );
-}
+resetNote();
 
 $(".dropdown #down").click(function () {
     if (!canClick) {
@@ -240,10 +191,13 @@ const showNoteMode = () => {
                 console.log(fret);
                 if (fret == "x") {
                     $(`#indicate ${notesClassName[index].replace(".mask", "")}`)
-                        .text("X")
+                        .text("")
+                        .prepend(
+                            '<img style="width: 20px; left: 0px; top:4px; position: relative;" src="./img/x.png"/>'
+                        )
                         .css({
                             color: "#f00",
-                            "background-color": "#fa990f",
+                            "background-color": "rgb(254 244 229)",
                         })
                         .animate(500);
                 } else if (fret == "0") {
@@ -310,47 +264,59 @@ function changeOpenNotes() {
 }
 // Process chords
 function resetNote() {
-    $(".mask ul").text("");
-    for (var i = 0; i < notes.e.length; i++) {
+    $(".notes .mask ul").text("");
+    for (let i = 0; i < notes.e.length; i++) {
         $(".mask.low-e ul").append(
-            '<li note="' +
+            "<li note-number=" +
+                i +
+                " note=" +
                 notes.e[i] +
-                '" style="opacity: 0;">' +
+                " style='opacity: 0;'>" +
                 notes.e[i] +
                 "</li>"
         );
         $(".mask.a ul").append(
-            '<li note="' +
+            "<li note-number=" +
+                i +
+                " note=" +
                 notes.a[i] +
-                '" style="opacity: 0;">' +
+                " style='opacity: 0;'>" +
                 notes.a[i] +
                 "</li>"
         );
         $(".mask.d ul").append(
-            '<li note="' +
+            "<li note-number=" +
+                i +
+                " note=" +
                 notes.d[i] +
-                '" style="opacity: 0;">' +
+                " style='opacity: 0;'>" +
                 notes.d[i] +
                 "</li>"
         );
         $(".mask.g ul").append(
-            '<li note="' +
+            "<li note-number=" +
+                i +
+                " note=" +
                 notes.g[i] +
-                '" style="opacity: 0;">' +
+                " style='opacity: 0;'>" +
                 notes.g[i] +
                 "</li>"
         );
         $(".mask.b ul").append(
-            '<li note="' +
+            "<li note-number=" +
+                i +
+                " note=" +
                 notes.b[i] +
-                '" style="opacity: 0;">' +
+                " style='opacity: 0;'>" +
                 notes.b[i] +
                 "</li>"
         );
         $(".mask.high-e ul").append(
-            '<li note="' +
+            "<li note-number=" +
+                i +
+                " note=" +
                 notes.e[i] +
-                '" style="opacity: 0;">' +
+                " style='opacity: 0;'>" +
                 notes.e[i] +
                 "</li>"
         );
@@ -444,9 +410,14 @@ $(".dropdown #switch-tone input").change(() => {
 
     chordTab1 = chordTab2;
     chordTab2 = temp2;
-
     resetNote();
-    showNotes(chordTab1[currentTab]);
+
+    if (floatingMenu == "chord") {
+        console.log("switch chord");
+        showNoteMode();
+    } else if (floatingMenu == "note") {
+        showNotes(chordTab1[currentTab]);
+    }
 });
 
 $(function () {
