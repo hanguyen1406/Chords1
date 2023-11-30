@@ -27,8 +27,12 @@ document.querySelectorAll("div.tab").forEach((x) => {
     Tab_Stripe_a.forEach(
         (x, index) =>
             (x.onclick = async (e) => {
-                noteToShow = (chordTab1[index] in giang) ? giang[chordTab1[index]] : chordTab1[index];
-
+                noteToShow =
+                    chordTab1[index] in giang
+                        ? giang[chordTab1[index]]
+                        : chordTab1[index];
+                //reset de xoa nut mau xanh cua chord truoc do
+                resetNote();
                 SetTab(index);
                 document
                     .querySelector("#fret0")
@@ -36,7 +40,7 @@ document.querySelectorAll("div.tab").forEach((x) => {
                 $(".tab-content #chord-version").text(1);
                 $(".tab-content #chord-name #chord").text(noteToShow);
                 currentFret = chordVersion = 0;
-                console.log(noteToShow);
+                // console.log(noteToShow);
                 await fetch(
                     `./chords/${noteToShow.replace("#", "sharp")}/major.json`
                 )

@@ -85,6 +85,13 @@ var giang = {
     Ab: "G#",
     Bb: "A#",
 };
+var thang = {
+    "C#": "Db",
+    "D#": "Eb",
+    "F#": "Gb",
+    "G#": "Ab",
+    "A#": "Bb",
+};
 //render notes
 resetNote();
 
@@ -128,7 +135,7 @@ $(".dropdown #up").click(function () {
 });
 
 const showChordNumber = (chordSymbol) => {
-    console.log("show chord number: " + chordSymbol);
+    // console.log("show chord number: " + chordSymbol);
     if (!canClick) return;
     chordActive =
         chords.majors.find((item) => item.name === chordSymbol) ||
@@ -177,7 +184,7 @@ const showNoteMode = () => {
         canClick = false;
         $("li[dot-number]").animate({ opacity: 0 }, 500);
         if (chordActive) {
-            console.log(chordActive);
+            // console.log(chordActive);
             $("[note-number]").animate({ opacity: 0 }, 500);
             const notesClassName = [
                 ".mask.low-e",
@@ -188,7 +195,7 @@ const showNoteMode = () => {
                 ".mask.high-e",
             ];
             [...chordActive[chordVersion]["frets"]].forEach((fret, index) => {
-                console.log(fret);
+                // console.log(fret);
                 if (fret == "x") {
                     $(`#indicate ${notesClassName[index].replace(".mask", "")}`)
                         .text("")
@@ -210,6 +217,18 @@ const showNoteMode = () => {
                         .animate(500);
                 } else if (fret != "x" && fret != "0") {
                     fret = parseInt(fret, 16);
+                    var note = $(
+                        `.notes ${notesClassName[index]} ul li[note-number="${fret}"]`
+                    ).html();
+                    
+                    if (
+                        note == noteToShow ||
+                        (note == thang[noteToShow] && thang[noteToShow])
+                    ) {
+                        $(
+                            `.notes ${notesClassName[index]} ul li[note-number="${fret}"]`
+                        ).css({ "background-color": "#007D1D" });
+                    }
                     $(`#indicate ${notesClassName[index].replace(".mask", "")}`)
                         .text(openNote[index])
                         .css({
@@ -413,7 +432,7 @@ $(".dropdown #switch-tone input").change(() => {
     resetNote();
 
     if (floatingMenu == "chord") {
-        console.log("switch chord");
+        // console.log("switch chord");
         showNoteMode();
     } else if (floatingMenu == "note") {
         showNotes(chordTab1[currentTab]);
