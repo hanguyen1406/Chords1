@@ -1,24 +1,28 @@
 {
-  "key": "F#",
-  "suffix": "aug9",
-  "positions": [
-    {
-      "frets": "212130",
-      "fingers": "213140",
-      "barres": 1
-    },
-    {
-      "frets": "x98790",
-      "fingers": "032140"
-    },
-    {
-      "frets": "x9899a",
-      "fingers": "021334",
-      "barres": 9
-    },
-    {
-      "frets": "excdb0",
-      "fingers": "402310"
-    }
-  ]
+    "key": "F#",
+    "suffix": "aug9",
+    "positions": [
+        {
+            "frets": "21213x",
+            "fingers": "213140",
+            "barres": "1",
+            "capo": "true"
+        },
+        {
+            "frets": "210130",
+            "fingers": "310240"
+        },
+        {
+            "frets": "edcdxc",
+            "fingers": "421301",
+            "barres": "12",
+            "capo": "true"
+        },
+        {
+            "frets": "ededfx",
+            "fingers": "213140",
+            "barres": "13",
+            "capo": "true"
+        }
+    ]
 }

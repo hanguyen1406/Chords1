@@ -55,6 +55,15 @@ h1 {
     height: 20px;
     margin-bottom:15px
 }
+.guitar-neck #barres {
+    position: absolute;
+    width: 100%;
+    height: 30px;
+    background-color: #686868de;
+    border-radius: 20px;
+    top: 80px;
+    opacity: 0;
+}
 .fretboard {
     max-width: 260px;
     width: 75%;

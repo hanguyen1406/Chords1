@@ -34,12 +34,11 @@ document.querySelectorAll("div.tab").forEach((x) => {
                 //reset de xoa nut mau xanh cua chord truoc do
                 resetNote();
                 SetTab(index);
-                document
-                    .querySelector("#fret0")
-                    .scrollIntoView({ behavior: "smooth" });
+                goToFret0();
                 $(".tab-content #chord-version").text(1);
                 $(".tab-content #chord-name #chord").text(noteToShow);
-                currentFret = chordVersion = 0;
+                chordVersion = 0;
+                currentFret = 20;
                 // console.log(noteToShow);
                 await fetch(
                     `./chords/${noteToShow.replace("#", "sharp")}/major.json`

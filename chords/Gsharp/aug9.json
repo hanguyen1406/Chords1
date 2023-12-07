@@ -1,25 +1,24 @@
 {
-  "key": "G#",
-  "suffix": "aug9",
-  "positions": [
-    {
-      "frets": "212112",
-      "fingers": "213114",
-      "barres": 1,
-      "capo": true
-    },
-    {
-      "frets": "434350",
-      "fingers": "213140",
-      "barres": 3
-    },
-    {
-      "frets": "xx4556",
-      "fingers": "001234"
-    },
-    {
-      "frets": "xbabb0",
-      "fingers": "021340"
-    }
-  ]
+    "key": "G#",
+    "suffix": "aug9",
+    "positions": [
+        {
+            "frets": "43435x",
+            "fingers": "213140",
+            "barres": "3",
+            "capo": "true"
+        },
+        {
+            "frets": "gfefxe",
+            "fingers": "421301",
+            "barres": "14",
+            "capo": "true"
+        },
+        {
+            "frets": "gfgfhx",
+            "fingers": "213140",
+            "barres": "15",
+            "capo": "true"
+        }
+    ]
 }
