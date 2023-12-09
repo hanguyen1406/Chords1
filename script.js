@@ -34,29 +34,19 @@ document.querySelectorAll("div.tab").forEach((x) => {
                 //reset de xoa nut mau xanh cua chord truoc do
                 resetNote();
                 SetTab(index);
-                goToFret0();
                 $(".tab-content #chord-version").text(1);
                 $(".tab-content #chord-name #chord").text(noteToShow);
                 chordVersion = 0;
                 currentFret = 20;
                 // console.log(noteToShow);
-                await fetch(
-                    `./chords/${noteToShow.replace("#", "sharp")}/major.json`
-                )
-                    .then((response) => response.json())
-                    .then((data) => {
-                        // console.log(data);
-                        chordActive = data["positions"];
-                    })
-                    .catch((error) => {
-                        console.error("Error fetching data:", error);
-                    });
-
-                if (floatingMenu === "note") {
+                await getDataChord();
+                if (floatingMenu == "note") {
                     showNotes(chordTab1[index]);
-                } else if (floatingMenu === "chord") {
+                    goToFret0();
+                } else if (floatingMenu == "chord") {
                     // console.log("note: " + noteToShow);
                     showNoteMode();
+                    goCurrentFret();
                 } else {
                 }
                 chordVersion = 0;

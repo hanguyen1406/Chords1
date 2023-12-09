@@ -37,23 +37,102 @@ h1 {
     border-radius: 5%;
     display: none;
     opacity: 0;
-    box-shadow: rgba(0, 0, 0, 0.19) 0px 10px 20px, rgba(0, 0, 0, 0.23) 0px 6px 6px;
+    box-shadow: rgba(0, 0, 0, 0.19) 0px 10px 20px,
+        rgba(0, 0, 0, 0.23) 0px 6px 6px;
 }
 .tab-content .child {
     margin-top: 20px; /* Just for separation in the example */
 }
 
+.componentsBox {
+    padding: 50px;
+    border-bottom: 1px solid #e5e5e5;
+}
+/* css for switch button */
+.switch {
+    display: inline-block;
+}
+.switch input {
+    display: none;
+}
+.switch small {
+    display: inline-block;
+    width: 63px;
+    height: 25px;
+    background: #455a64;
+    border-radius: 30px;
+    position: relative;
+    cursor: pointer;
+}
+.switch small:after {
+    /* content: "Minor"; */
+    position: absolute;
+    color: #fff;
+    font-size: 13px;
+    font-weight: 600;
+    width: 100%;
+    left: 0px;
+    text-align: right;
+    padding: 0 5px;
+    box-sizing: border-box;
+    line-height: 25px;
+}
+.switch small:before {
+    content: "";
+    position: absolute;
+    width: 14px;
+    height: 14px;
+    background: #fff;
+    border-radius: 50%;
+    top: 5px;
+    left: 4px;
+    transition: 0.3s;
+    box-shadow: -3px 0 3px rgba(0, 0, 0, 0.1);
+}
+.switch input:checked ~ small {
+    background: #4fc5c5;
+    transition: 0.3s;
+}
+.switch input:checked ~ small:before {
+    transform: translate(41px, 0px);
+    transition: 0.3s;
+}
+.switch input:checked ~ small:after {
+    /* content: "Major"; */
+    text-align: left;
+}
+/* thay doi text cho 3 nut */
+#sw-minor small:after {
+    content: 'Minor';
+}
+#sw-minor input:checked ~ small:after {
+    content: 'Major';
+}
+#sw-finger small:after {
+    content: 'Finger';
+}
+#sw-finger input:checked ~ small:after {
+    content: 'Note';
+}
+
+#sw-tone small:after {
+    content: '# ⇋ b';
+}
+#sw-tone input:checked ~ small:after {
+    content: 'b ⇋ #';
+}
+
 .tab-content .position-right {
     position: absolute;
-    top: 5px; 
-    right: 8px; 
-    color: #211f1d; 
+    top: 5px;
+    right: 8px;
+    color: #211f1d;
     text-decoration: none;
 }
-#indicate{
+#indicate {
     width: 100%;
     height: 20px;
-    margin-bottom:15px
+    margin-bottom: 15px;
 }
 .guitar-neck #barres {
     position: absolute;
@@ -124,7 +203,7 @@ h1 {
     display: inline-flex;
     justify-content: space-between;
     width: 93%;
-    padding-left:20px;
+    padding-left: 20px;
     /* left:-2px */
 }
 

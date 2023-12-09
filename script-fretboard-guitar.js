@@ -63,6 +63,7 @@ var chordVersion = 0;
 var chordSymbol = "C";
 var floatingMenu = "note";
 var currentFret = 20;
+var chordFileName = "major";
 var notes = {
     e: ["E", "F", "F#", "G", "G#", "A", "A#", "B", "C", "C#", "D", "D#", "E"],
     a: ["A", "A#", "B", "C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A"],
@@ -95,6 +96,12 @@ var thang = {
 //render notes
 resetNote();
 
+function goCurrentFret() {
+    document
+        .querySelector("#fret" + (currentFret - 1))
+        .scrollIntoView({ behavior: "smooth" });
+}
+
 $(".dropdown #down").click(function () {
     if (!canClick) {
         return false;
@@ -109,9 +116,7 @@ $(".dropdown #down").click(function () {
     } else currentFret = 8;
     // console.log(currentFret);
     if (currentFret < 3) currentFret = 1;
-    document
-        .querySelector("#fret" + (currentFret - 1))
-        .scrollIntoView({ behavior: "smooth" });
+    goCurrentFret();
 
     canClick = false;
     setTimeout(function () {
@@ -145,9 +150,7 @@ $(".dropdown #up").click(function () {
         if (chordVersion < 0) chordVersion = chordActive.length - 1;
         currentFret = 20;
         showNoteMode();
-        document
-            .querySelector("#fret" + (currentFret - 1))
-            .scrollIntoView({ behavior: "smooth" });
+        goCurrentFret();
         $(".tab-content #chord-version").text(chordVersion + 1);
     } else {
         canClick = false;
@@ -465,7 +468,7 @@ $(".tab-content #popup-menu a").on("click", () => {
     }, 100);
 });
 
-$(".dropdown #switch-tone input").change(() => {
+$(".dropdown #sw-tone input").change(() => {
     // alert('hii')
     let temp1 = notes,
         temp2 = chordTab1;
@@ -486,10 +489,31 @@ $(".dropdown #switch-tone input").change(() => {
         showNotes(chordTab1[currentTab]);
     }
 });
-$(".dropdown #switch-m input").change(() => {
-    resetNote();
-    resetOpenNote();
+
+async function getDataChord() {
+    await fetch(
+        `./chords/${noteToShow.replace("#", "sharp")}/${chordFileName}.json`
+    )
+        .then((response) => response.json())
+        .then((data) => {
+            // console.log(data);
+            chordActive = data["positions"];
+        })
+        .catch((error) => {
+            console.error("Error fetching data:", error);
+        });
+}
+
+$(".dropdown #sw-minor input").change(async () => {
     goToFret0();
+    chordFileName = chordFileName == "major" ? "minor" : "major";
+    if (floatingMenu == "chord") {
+        await getDataChord();
+        chordVersion = 0;
+        currentFret = 20;
+        showNoteMode();
+        goCurrentFret();
+    }
 });
 
 $(function () {
