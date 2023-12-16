@@ -37,7 +37,7 @@ document.querySelectorAll("div.tab").forEach((x) => {
                 $(".tab-content #chord-version").text(1);
                 $(".tab-content #chord-name #chord").text(noteToShow);
                 chordVersion = 0;
-                currentFret = 20;
+                currentFret = 6;
                 // console.log(noteToShow);
                 await getDataChord();
                 if (floatingMenu == "note") {
@@ -49,7 +49,6 @@ document.querySelectorAll("div.tab").forEach((x) => {
                     goCurrentFret();
                 } else {
                 }
-                chordVersion = 0;
                 currentTab = index;
                 e.preventDefault();
             })

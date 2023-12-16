@@ -62,21 +62,21 @@ var currentTab = 0;
 var chordVersion = 0;
 var chordSymbol = "C";
 var floatingMenu = "note";
-var currentFret = 20;
+var currentFret = 1;
 var chordFileName = "major";
 var notes = {
-    e: ["E", "F", "F#", "G", "G#", "A", "A#", "B", "C", "C#", "D", "D#", "E"],
-    a: ["A", "A#", "B", "C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A"],
-    d: ["D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B", "C", "C#", "D"],
-    g: ["G", "G#", "A", "A#", "B", "C", "C#", "D", "D#", "E", "F", "F#", "G"],
-    b: ["B", "C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"],
+    e: ["E", "F", "F#", "G", "G#", "A", "A#", "B", "C", "C#", "D", "D#"],
+    a: ["A", "A#", "B", "C", "C#", "D", "D#", "E", "F", "F#", "G", "G#"],
+    d: ["D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B", "C", "C#"],
+    g: ["G", "G#", "A", "A#", "B", "C", "C#", "D", "D#", "E", "F", "F#"],
+    b: ["B", "C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#"],
 };
 var note2 = {
-    e: ["E", "F", "Gb", "G", "Ab", "A", "Bb", "B", "C", "Db", "D", "Eb", "E"],
-    a: ["A", "Bb", "B", "C", "Db", "D", "Eb", "E", "F", "Gb", "G", "Ab", "A"],
-    d: ["D", "Eb", "E", "F", "Gb", "G", "Ab", "A", "Bb", "B", "C", "Db", "D"],
-    g: ["G", "Ab", "A", "Bb", "B", "C", "Db", "D", "Eb", "E", "F", "Gb", "G"],
-    b: ["B", "C", "Db", "D", "Eb", "E", "F", "Gb", "G", "Ab", "A", "Bb", "B"],
+    e: ["E", "F", "Gb", "G", "Ab", "A", "Bb", "B", "C", "Db", "D", "Eb"],
+    a: ["A", "Bb", "B", "C", "Db", "D", "Eb", "E", "F", "Gb", "G", "Ab"],
+    d: ["D", "Eb", "E", "F", "Gb", "G", "Ab", "A", "Bb", "B", "C", "Db"],
+    g: ["G", "Ab", "A", "Bb", "B", "C", "Db", "D", "Eb", "E", "F", "Gb"],
+    b: ["B", "C", "Db", "D", "Eb", "E", "F", "Gb", "G", "Ab", "A", "Bb"],
 };
 var openNote = ["E", "A", "D", "G", "B", "E"];
 var giang = {
@@ -97,6 +97,8 @@ var thang = {
 resetNote();
 
 function goCurrentFret() {
+    if (currentFret < 3) currentFret = 1;
+    console.log("fret: " + currentFret);
     document
         .querySelector("#fret" + (currentFret - 1))
         .scrollIntoView({ behavior: "smooth" });
@@ -108,15 +110,19 @@ $(".dropdown #down").click(function () {
     }
     if (floatingMenu == "chord") {
         chordVersion++;
-        // console.log(chordVersion);
         if (chordVersion == chordActive.length) chordVersion = 0;
-        currentFret = 20;
+        currentFret = 24;
         showNoteMode();
         $(".tab-content #chord-version").text(chordVersion + 1);
-    } else currentFret = 8;
-    // console.log(currentFret);
-    if (currentFret < 3) currentFret = 1;
-    goCurrentFret();
+    } else {
+        if (currentFret < 7) currentFret = 8;
+        else if (currentFret < 20) {
+            currentFret = 20;
+        } else {
+            currentFret = 1;
+        }
+        goCurrentFret();
+    }
 
     canClick = false;
     setTimeout(function () {
@@ -146,15 +152,15 @@ $(".dropdown #up").click(function () {
 
     if (floatingMenu == "chord") {
         chordVersion--;
-        // console.log(chordVersion);
         if (chordVersion < 0) chordVersion = chordActive.length - 1;
-        currentFret = 20;
         showNoteMode();
-        goCurrentFret();
+        // console.log("chord version: " + chordVersion);
         $(".tab-content #chord-version").text(chordVersion + 1);
     } else {
         canClick = false;
-        goToFret0();
+        if (currentFret == 1) currentFret = 20;
+        else currentFret = 1;
+        goCurrentFret();
     }
     setTimeout(function () {
         canClick = true;
@@ -205,94 +211,102 @@ const showChordNumber = (chordSymbol) => {
     }, 500);
 };
 
+function convToDec(char) {
+    if (!isNaN(char)) return char;
+
+    var charCodeOfG = "G".charCodeAt(0);
+    var charCode = char.charCodeAt(0);
+
+    var decimalValue = charCode - charCodeOfG + 16;
+    return decimalValue;
+}
+
 const showNoteMode = () => {
     if (!canClick) return;
+    console.log("chord version: " + chordVersion);
+    currentFret = 24;
+    canClick = false;
+    $("li[dot-number]").animate({ opacity: 0 }, 500);
+    if (chordActive) {
+        // console.log(chordActive);
+        $("[note-number]").animate({ opacity: 0 }, 500);
+        const notesClassName = [
+            ".mask.low-e",
+            ".mask.a",
+            ".mask.d",
+            ".mask.g",
+            ".mask.b",
+            ".mask.high-e",
+        ];
 
-    if (1) {
-        canClick = false;
-        $("li[dot-number]").animate({ opacity: 0 }, 500);
-        if (chordActive) {
-            // console.log(chordActive);
-            $("[note-number]").animate({ opacity: 0 }, 500);
-            const notesClassName = [
-                ".mask.low-e",
-                ".mask.a",
-                ".mask.d",
-                ".mask.g",
-                ".mask.b",
-                ".mask.high-e",
-            ];
+        [...chordActive[chordVersion]["frets"]].forEach((fret, index) => {
+            // console.log(fret);
 
-            [...chordActive[chordVersion]["frets"]].forEach((fret, index) => {
-                // console.log(fret);
+            if (fret == "x") {
+                $(`#indicate ${notesClassName[index].replace(".mask", "")}`)
+                    .text("")
+                    .prepend(
+                        '<img style="width: 20px; left: 0px; top:4px; position: relative;" src="./img/x.png"/>'
+                    )
+                    .css({
+                        color: "#f00",
+                        "background-color": "rgb(254 244 229)",
+                    })
+                    .animate(500);
+            } else if (fret == "0") {
+                $(`#indicate ${notesClassName[index].replace(".mask", "")}`)
+                    .text(openNote[index])
+                    .css({
+                        color: "#fff",
+                        "background-color":
+                            noteToShow == openNote[index]
+                                ? "#007D1D"
+                                : "#fa990f",
+                    })
+                    .animate(500);
+            } else if (fret != "x" && fret != "0") {
+                fret = convToDec(fret.toUpperCase());
+                console.log(fret);
+                var note = $(
+                    `.notes ${notesClassName[index]} ul li[note-number="${fret}"]`
+                ).html();
 
-                if (fret == "x") {
-                    $(`#indicate ${notesClassName[index].replace(".mask", "")}`)
-                        .text("")
-                        .prepend(
-                            '<img style="width: 20px; left: 0px; top:4px; position: relative;" src="./img/x.png"/>'
-                        )
-                        .css({
-                            color: "#f00",
-                            "background-color": "rgb(254 244 229)",
-                        })
-                        .animate(500);
-                } else if (fret == "0") {
-                    $(`#indicate ${notesClassName[index].replace(".mask", "")}`)
-                        .text(openNote[index])
-                        .css({
-                            color: "#fff",
-                            "background-color":
-                                noteToShow == openNote[index]
-                                    ? "#007D1D"
-                                    : "#fa990f",
-                        })
-                        .animate(500);
-                } else if (fret != "x" && fret != "0") {
-                    fret = parseInt(fret, 16);
-                    var note = $(
-                        `.notes ${notesClassName[index]} ul li[note-number="${fret}"]`
-                    ).html();
-
-                    if (
-                        note == noteToShow ||
-                        (note == thang[noteToShow] && thang[noteToShow])
-                    ) {
-                        $(
-                            `.notes ${notesClassName[index]} ul li[note-number="${fret}"]`
-                        ).css({ "background-color": "#007D1D" });
-                    }
-                    $(`#indicate ${notesClassName[index].replace(".mask", "")}`)
-                        .text(openNote[index])
-                        .css({
-                            color: "rgb(134 124 108)",
-                            "background-color": "rgb(254 244 229)",
-                        })
-                        .animate(500);
-                    currentFret = Math.min(currentFret, fret);
+                if (
+                    note == noteToShow ||
+                    (note == thang[noteToShow] && thang[noteToShow])
+                ) {
                     $(
                         `.notes ${notesClassName[index]} ul li[note-number="${fret}"]`
-                    ).animate({ opacity: 1 }, 500);
+                    ).css({ "background-color": "#007D1D" });
                 }
-            });
-            if (chordActive[chordVersion]["barres"]) {
-                // console.log(currentFret);
-                $(".guitar-neck #barres")
-                    .css({ opacity: 1, top: `${currentFret * 80}px` })
+                $(`#indicate ${notesClassName[index].replace(".mask", "")}`)
+                    .text(openNote[index])
+                    .css({
+                        color: "rgb(134 124 108)",
+                        "background-color": "rgb(254 244 229)",
+                    })
                     .animate(500);
-            } else {
-                $(".guitar-neck #barres").css({ opacity: 0 }).animate(500);
+                currentFret = Math.min(currentFret, fret);
+                $(
+                    `.notes ${notesClassName[index]} ul li[note-number="${fret}"]`
+                ).animate({ opacity: 1 }, 500);
             }
+        });
+        if (chordActive[chordVersion]["barres"]) {
+            // console.log(currentFret);
+            $(".guitar-neck #barres")
+                .css({ opacity: 1, top: `${currentFret * 80}px` })
+                .animate(500);
         } else {
-            $(".guitar-neck li[note-number]").animate({ opacity: 1 }, 500);
+            $(".guitar-neck #barres").css({ opacity: 0 }).animate(500);
         }
-        setTimeout(() => {
-            canClick = true;
-        }, 500);
+        goCurrentFret();
     } else {
-        $(".guitar-neck li[note-number]").animate({ opacity: 0 }, 500);
-        if (chordActive) showChordNumber(chordActive.name);
+        $(".guitar-neck li[note-number]").animate({ opacity: 1 }, 500);
     }
+    setTimeout(() => {
+        canClick = true;
+    }, 500);
 };
 
 function showNotes(noteToShow) {
@@ -326,59 +340,59 @@ function changeOpenNotes() {
 function resetNote() {
     $(".guitar-neck #barres").css({ opacity: 0 });
     $(".notes .mask ul").text("");
-    for (let i = 0; i < notes.e.length; i++) {
+    for (let i = 0; i < notes.e.length*2; i++) {
         $(".mask.low-e ul").append(
             "<li note-number=" +
                 i +
                 " note=" +
-                notes.e[i] +
+                notes.e[i%notes.e.length] +
                 " style='opacity: 0;'>" +
-                notes.e[i] +
+                notes.e[i%notes.e.length] +
                 "</li>"
         );
         $(".mask.a ul").append(
             "<li note-number=" +
                 i +
                 " note=" +
-                notes.a[i] +
+                notes.a[i%notes.e.length] +
                 " style='opacity: 0;'>" +
-                notes.a[i] +
+                notes.a[i%notes.e.length] +
                 "</li>"
         );
         $(".mask.d ul").append(
             "<li note-number=" +
                 i +
                 " note=" +
-                notes.d[i] +
+                notes.d[i%notes.e.length] +
                 " style='opacity: 0;'>" +
-                notes.d[i] +
+                notes.d[i%notes.e.length] +
                 "</li>"
         );
         $(".mask.g ul").append(
             "<li note-number=" +
                 i +
                 " note=" +
-                notes.g[i] +
+                notes.g[i%notes.e.length] +
                 " style='opacity: 0;'>" +
-                notes.g[i] +
+                notes.g[i%notes.e.length] +
                 "</li>"
         );
         $(".mask.b ul").append(
             "<li note-number=" +
                 i +
                 " note=" +
-                notes.b[i] +
+                notes.b[i%notes.e.length] +
                 " style='opacity: 0;'>" +
-                notes.b[i] +
+                notes.b[i%notes.e.length] +
                 "</li>"
         );
         $(".mask.high-e ul").append(
             "<li note-number=" +
                 i +
                 " note=" +
-                notes.e[i] +
+                notes.e[i%notes.e.length] +
                 " style='opacity: 0;'>" +
-                notes.e[i] +
+                notes.e[i%notes.e.length] +
                 "</li>"
         );
     }
@@ -391,9 +405,9 @@ function resetNote() {
 // chords.minors.forEach(chord => {
 // 	$('ul.chord-minor').append(`<li button-click id="btn-chord-${chord.name}">${chord.name}</li>`)
 // });
-// for (let i = 1; i <= 12; i++) {
-// 	$('ul.compartment-number').append(`<li>${i}</li>`)
-// }
+for (let i = 1; i <= 24; i++) {
+    $("ul.compartment-number").append(`<li>${i}</li>`);
+}
 // Render dots
 // for (var i = 1; i <= 12; i++) {
 // 	$('.red-dot.low-e ul').append(`<li dot-number="${i}">.</li>`)
@@ -452,7 +466,6 @@ $(".wrapper #chord").on("click", () => {
     $(".tab-content #chord-name b").animate({ opacity: 1 }, 500);
     floatingMenu = "chord";
     showNoteMode(chordSymbol);
-    goToFret0();
 });
 
 //function for display popup menu
@@ -491,6 +504,7 @@ $(".dropdown #sw-tone input").change(() => {
 });
 
 async function getDataChord() {
+    console.log(chordFileName);
     await fetch(
         `./chords/${noteToShow.replace("#", "sharp")}/${chordFileName}.json`
     )
@@ -505,15 +519,14 @@ async function getDataChord() {
 }
 
 $(".dropdown #sw-minor input").change(async () => {
-    goToFret0();
     chordFileName = chordFileName == "major" ? "minor" : "major";
+    await getDataChord();
+    currentFret = 6;
+
     if (floatingMenu == "chord") {
-        await getDataChord();
         chordVersion = 0;
-        currentFret = 20;
         showNoteMode();
-        goCurrentFret();
-    }
+    }else goToFret0();
 });
 
 $(function () {
