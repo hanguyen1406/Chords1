@@ -33,29 +33,7 @@ var chordTab2 = [
     "B",
 ];
 var noteToShow = "C";
-var chordActive = [
-    {
-        frets: "x32010",
-        fingers: "032010",
-    },
-    {
-        frets: "x35553",
-        fingers: "012341",
-        barres: 3,
-        capo: true,
-    },
-    {
-        frets: "xx5558",
-        fingers: "001114",
-        barres: 5,
-    },
-    {
-        frets: "8aa988",
-        fingers: "134211",
-        barres: 8,
-        capo: true,
-    },
-];
+var chordActive = 0;
 var canClick = true;
 var switchGuitar = false;
 var currentTab = 0;
@@ -64,6 +42,7 @@ var chordSymbol = "C";
 var floatingMenu = "note";
 var currentFret = 1;
 var chordFileName = "major";
+getDataChord();
 var notes = {
     e: ["E", "F", "F#", "G", "G#", "A", "A#", "B", "C", "C#", "D", "D#"],
     a: ["A", "A#", "B", "C", "C#", "D", "D#", "E", "F", "F#", "G", "G#"],
@@ -340,59 +319,59 @@ function changeOpenNotes() {
 function resetNote() {
     $(".guitar-neck #barres").css({ opacity: 0 });
     $(".notes .mask ul").text("");
-    for (let i = 0; i < notes.e.length*2; i++) {
+    for (let i = 0; i < notes.e.length * 2; i++) {
         $(".mask.low-e ul").append(
             "<li note-number=" +
                 i +
                 " note=" +
-                notes.e[i%notes.e.length] +
+                notes.e[i % notes.e.length] +
                 " style='opacity: 0;'>" +
-                notes.e[i%notes.e.length] +
+                notes.e[i % notes.e.length] +
                 "</li>"
         );
         $(".mask.a ul").append(
             "<li note-number=" +
                 i +
                 " note=" +
-                notes.a[i%notes.e.length] +
+                notes.a[i % notes.e.length] +
                 " style='opacity: 0;'>" +
-                notes.a[i%notes.e.length] +
+                notes.a[i % notes.e.length] +
                 "</li>"
         );
         $(".mask.d ul").append(
             "<li note-number=" +
                 i +
                 " note=" +
-                notes.d[i%notes.e.length] +
+                notes.d[i % notes.e.length] +
                 " style='opacity: 0;'>" +
-                notes.d[i%notes.e.length] +
+                notes.d[i % notes.e.length] +
                 "</li>"
         );
         $(".mask.g ul").append(
             "<li note-number=" +
                 i +
                 " note=" +
-                notes.g[i%notes.e.length] +
+                notes.g[i % notes.e.length] +
                 " style='opacity: 0;'>" +
-                notes.g[i%notes.e.length] +
+                notes.g[i % notes.e.length] +
                 "</li>"
         );
         $(".mask.b ul").append(
             "<li note-number=" +
                 i +
                 " note=" +
-                notes.b[i%notes.e.length] +
+                notes.b[i % notes.e.length] +
                 " style='opacity: 0;'>" +
-                notes.b[i%notes.e.length] +
+                notes.b[i % notes.e.length] +
                 "</li>"
         );
         $(".mask.high-e ul").append(
             "<li note-number=" +
                 i +
                 " note=" +
-                notes.e[i%notes.e.length] +
+                notes.e[i % notes.e.length] +
                 " style='opacity: 0;'>" +
-                notes.e[i%notes.e.length] +
+                notes.e[i % notes.e.length] +
                 "</li>"
         );
     }
@@ -526,7 +505,7 @@ $(".dropdown #sw-minor input").change(async () => {
     if (floatingMenu == "chord") {
         chordVersion = 0;
         showNoteMode();
-    }else goToFret0();
+    } else goToFret0();
 });
 
 $(function () {
