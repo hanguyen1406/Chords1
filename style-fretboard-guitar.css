@@ -419,16 +419,17 @@ h1 {
 /* Red dot */
 .guitar-neck .red-dots {
     position: absolute;
-    top: 30px;
+    top: -45px;
     width: 100%;
-    height: fit-content;
+    height: 2020px;
     overflow-x: hidden;
     overflow-y: hidden;
     z-index: 5;
-    /* left: 3px; */
+    display: flex;
+    justify-content: space-between;
+    padding-left:2px;
 }
 .guitar-neck .red-dots .red-dot {
-    position: absolute;
     width: 30px;
     height: 1000px;
 }
@@ -451,20 +452,14 @@ h1 {
     opacity: 0;
 }
 .guitar-neck .red-dots .red-dot ul li:nth-child(1) {
-    margin-bottom: 12px;
 }
 .guitar-neck .red-dots .red-dot.a {
-    left: 47px;
 }
 .guitar-neck .red-dots .red-dot.d {
-    left: 93px;
 }
 .guitar-neck .red-dots .red-dot.g {
-    left: 137px;
 }
 .guitar-neck .red-dots .red-dot.b {
-    left: 181px;
 }
 .guitar-neck .red-dots .red-dot.high-e {
-    left: 224px;
 }

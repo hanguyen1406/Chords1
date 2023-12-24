@@ -42,6 +42,7 @@ var chordSymbol = "C";
 var floatingMenu = "note";
 var currentFret = 1;
 var chordFileName = "major";
+var fretOrFinger = "fret";
 getDataChord();
 var notes = {
     e: ["E", "F", "F#", "G", "G#", "A", "A#", "B", "C", "C#", "D", "D#"],
@@ -72,9 +73,9 @@ var thang = {
     "G#": "Ab",
     "A#": "Bb",
 };
-//render notes
+//render notes and fingers
 resetNote();
-
+resetFinger();
 function goCurrentFret() {
     if (currentFret < 3) currentFret = 1;
     console.log("fret: " + currentFret);
@@ -92,7 +93,8 @@ $(".dropdown #down").click(function () {
         if (chordVersion == chordActive.length) chordVersion = 0;
         currentFret = 24;
         showNoteMode();
-        $(".tab-content #chord-version").text(chordVersion + 1);
+        if (fretOrFinger == "finger") showFingerMode();
+        // $(".tab-content #chord-version").text(chordVersion + 1);
     } else {
         if (currentFret < 7) currentFret = 8;
         else if (currentFret < 20) {
@@ -132,9 +134,11 @@ $(".dropdown #up").click(function () {
     if (floatingMenu == "chord") {
         chordVersion--;
         if (chordVersion < 0) chordVersion = chordActive.length - 1;
-        showNoteMode();
+
+        if (fretOrFinger == "fret") showNoteMode();
+        else showFingerMode();
         // console.log("chord version: " + chordVersion);
-        $(".tab-content #chord-version").text(chordVersion + 1);
+        // $(".tab-content #chord-version").text(chordVersion + 1);
     } else {
         canClick = false;
         if (currentFret == 1) currentFret = 20;
@@ -303,7 +307,47 @@ function showNotes(noteToShow) {
         );
     }
 }
+function convToDec(char) {
+    if (!isNaN(char)) return char;
 
+    var charCodeOfG = "G".charCodeAt(0);
+    var charCode = char.charCodeAt(0);
+
+    var decimalValue = charCode - charCodeOfG + 16;
+    return decimalValue;
+}
+const showFingerMode = () => {
+    // console.log(chordActive);
+    currentFret = 24;
+    $("li[note-number]").animate({ opacity: 0 }, 500);
+    if (chordActive) {
+        // console.log(chordActive);
+        $("[dot-number]").animate({ opacity: 0 }, 500);
+        const notesClassName = [
+            ".red-dot.low-e",
+            ".red-dot.a",
+            ".red-dot.d",
+            ".red-dot.g",
+            ".red-dot.b",
+            ".red-dot.high-e",
+        ];
+
+        var fingers = [...chordActive[chordVersion]["fingers"]];
+        [...chordActive[chordVersion]["frets"]].forEach((fret, index) => {
+            if (fret != "x") {
+                fret = convToDec(fret.toUpperCase());
+                console.log(fret);
+                currentFret = Math.min(currentFret, fret);
+                $(
+                    `.red-dots ${notesClassName[index]} ul li[dot-number="${fret}"`
+                )
+                    .text(fingers[index])
+                    .animate({ opacity: 1 }, 500);
+            }
+        });
+        goCurrentFret();
+    }
+};
 function changeOpenNotes() {
     $(".guitar-neck .compartment-number").animate({ opacity: 0 }, 500);
     $("[dot-number]").animate({ opacity: 0 }, 500);
@@ -316,6 +360,18 @@ function changeOpenNotes() {
     });
 }
 // Process chords
+function resetFinger() {
+    $(".guitar-neck #barres").css({ opacity: 0 });
+    $(".red-dots .red-dot ul").text("");
+    for (let i = 0; i <= notes.e.length * 2; i++) {
+        $(".red-dot.low-e ul").append(`<li dot-number="${i}">.</li>`);
+        $(".red-dot.a ul").append(`<li dot-number="${i}">.</li>`);
+        $(".red-dot.d ul").append(`<li dot-number="${i}">.</li>`);
+        $(".red-dot.g ul").append(`<li dot-number="${i}">.</li>`);
+        $(".red-dot.b ul").append(`<li dot-number="${i}">.</li>`);
+        $(".red-dot.high-e ul").append(`<li dot-number="${i}">.</li>`);
+    }
+}
 function resetNote() {
     $(".guitar-neck #barres").css({ opacity: 0 });
     $(".notes .mask ul").text("");
@@ -423,6 +479,7 @@ $(".wrapper #note").on("click", () => {
     chordVersion = 0;
     floatingMenu = "note";
     resetNote();
+    resetFinger();
     resetOpenNote();
     showNotes(chordTab1[currentTab]);
 });
@@ -470,7 +527,7 @@ $(".dropdown #sw-tone input").change(() => {
     chordTab1 = chordTab2;
     chordTab2 = temp2;
     resetNote();
-
+    resetFinger();
     if (floatingMenu == "chord") {
         // console.log("switch chord");
         showNoteMode();
@@ -507,7 +564,16 @@ $(".dropdown #sw-minor input").change(async () => {
         showNoteMode();
     } else goToFret0();
 });
+$(".dropdown #sw-finger input").change(async () => {
+    fretOrFinger = fretOrFinger == "fret" ? "finger" : "fret";
+    currentFret = 6;
 
+    if (floatingMenu == "chord") {
+        // chordVersion = 0;
+        if (fretOrFinger == "finger") showFingerMode();
+        else showNoteMode();
+    } else goToFret0();
+});
 $(function () {
     var $win = $(window),
         $box = $("#selector button"),
