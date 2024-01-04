@@ -45,7 +45,8 @@ document.querySelectorAll("div.tab").forEach((x) => {
                     goToFret0();
                 } else if (floatingMenu == "chord") {
                     // console.log("note: " + noteToShow);
-                    showNoteMode();
+                    if (fretOrFinger == "finger") showFingerMode();
+                    else showNoteMode();
                     goCurrentFret();
                 } else {
                 }
