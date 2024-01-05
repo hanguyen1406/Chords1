@@ -24,6 +24,28 @@ h1 {
     justify-content: center;
     display: grid;
 }
+#popup-ct {
+    overflow-y: scroll;
+    overflow-x: hidden;
+    max-height: 90%;
+    width: 100%;
+    margin-top: 30px;
+    padding-left: 30px;
+    position: absolute;
+    left: 5px;
+    justify-content:space-around
+}
+#popup-ct a {
+    height: fit-content;
+    background-color: #4fc5c5;
+    border-radius: 15px;
+    padding: 10px;
+    width: fit-content;
+    margin-bottom: 5px;
+    color: #faeeee;
+    text-decoration: none;
+    box-shadow: rgba(0, 0, 0, 0.12) 0px 1px 3px, rgba(0, 0, 0, 0.24) 0px 1px 2px;
+}
 .tab-content #popup-menu {
     width: 90%;
     height: 60%;
@@ -71,11 +93,11 @@ h1 {
     font-size: 13px;
     font-weight: 600;
     width: 100%;
-    left: 0px;
+    left: 2px;
     text-align: right;
     padding: 0 5px;
     box-sizing: border-box;
-    line-height: 25px;
+    line-height: 23px;
 }
 .switch small:before {
     content: "";
@@ -103,23 +125,23 @@ h1 {
 }
 /* thay doi text cho 3 nut */
 #sw-minor small:after {
-    content: 'Minor';
+    content: "Minor";
 }
 #sw-minor input:checked ~ small:after {
-    content: 'Major';
+    content: "Major";
 }
 #sw-finger small:after {
-    content: 'Finger';
+    content: "Finger";
 }
 #sw-finger input:checked ~ small:after {
-    content: 'Note';
+    content: "Note";
 }
 
 #sw-tone small:after {
-    content: '# ⇋ b';
+    content: "# ⇋ b";
 }
 #sw-tone input:checked ~ small:after {
-    content: 'b ⇋ #';
+    content: "b ⇋ #";
 }
 
 .tab-content .position-right {
@@ -329,7 +351,7 @@ h1 {
 .guitar-neck .compartment-number {
     position: absolute;
     top: 33px;
-    left: -22px;
+    left: -25px;
     z-index: 5;
     padding: 0px;
 }
@@ -427,7 +449,7 @@ h1 {
     z-index: 5;
     display: flex;
     justify-content: space-between;
-    padding-left:2px;
+    padding-left: 2px;
 }
 .guitar-neck .red-dots .red-dot {
     width: 30px;

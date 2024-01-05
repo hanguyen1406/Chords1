@@ -182,7 +182,7 @@ const showNoteMode = () => {
                 $(`#indicate ${notesClassName[index].replace(".mask", "")}`)
                     .text("")
                     .prepend(
-                        '<img style="width: 20px; left: 0px; top:4px; position: relative;" src="./img/x.png"/>'
+                        '<img style="width: 20px; left: 0px; top:-2px; position: relative;" src="./img/x.png"/>'
                     )
                     .css({
                         color: "#f00",
@@ -468,9 +468,54 @@ $(".wrapper #chord").on("click", () => {
 });
 
 //function for display popup menu
-function showPopupMenu(id) {
+function showPopupMenu(index) {
     $(".tab-content #popup-menu").css("display", "unset");
+    $(".tab-content #popup-ct").html("");
+    // console.log(index);
+    var exclude;
+    switch (index) {
+        case 0:
+            exclude = [""];
+            break;
+        case 1:
+            exclude = ["maj"];
+            break;
+        case 2:
+            exclude = ["minor"];
+            break;
+        case 3:
+            exclude = ["6"];
+            break;
+        case 4:
+            exclude = ["sus"];
+            break;
+        case 5:
+            exclude = ["7"];
+            break;
+        case 6:
+            exclude = ["_"];
+            break;
+        case 7:
+            exclude = ["maj7"];
+            break;
+
+        default:
+            break;
+    }
+    for (let i of sortedWords) {
+        if (exclude.some((substring) => i.includes(substring))) {
+            $(".tab-content #popup-ct").append(
+                `<a onclick="changeFileName('${i}')" class="col-5" href="#">${i}</a>`
+            );
+        }
+    }
     $(".tab-content #popup-menu").animate({ opacity: 1 }, 200);
+}
+async function changeFileName(fileName) {
+    chordFileName = fileName.split(".")[0];
+    await getDataChord();
+    showNoteMode();
+    $(".tab-content #popup-menu").css("display", "none");
 }
 //event for hide popup menu
 $(".tab-content #popup-menu a").on("click", () => {
@@ -503,7 +548,8 @@ $(".dropdown #sw-tone input").change(() => {
 });
 
 async function getDataChord() {
-    // console.log(chordFileName);
+    console.log(chordFileName);
+    chordVersion = 0;
     await fetch(
         `./chords/${noteToShow.replace("#", "sharp")}/${chordFileName}.json`
     )
@@ -552,3 +598,71 @@ $(function () {
         }
     });
 });
+
+let a = [
+    "11.json",
+    "13.json",
+    "5.json",
+    "6.json",
+    "6add9.json",
+    "6b5.json",
+    "7#9.json",
+    "7#9b5.json",
+    "7.json",
+    "7b5.json",
+    "7b9.json",
+    "7sus2#5.json",
+    "7sus2.json",
+    "7sus2sus4.json",
+    "7sus4#5.json",
+    "7sus4.json",
+    "9.json",
+    "9b5.json",
+    "9sus4.json",
+    "add9.json",
+    "aug.json",
+    "aug7.json",
+    "aug9.json",
+    "augmaj7.json",
+    "augmaj9.json",
+    "dim.json",
+    "dim7.json",
+    "m#5.json",
+    "m11.json",
+    "m13.json",
+    "m6.json",
+    "m6add9.json",
+    "m7#5.json",
+    "m7.json",
+    "m7b5.json",
+    "m9.json",
+    "maj#11.json",
+    "maj11.json",
+    "maj13.json",
+    "maj7.json",
+    "maj7b5.json",
+    "maj7sus2.json",
+    "maj7sus2sus4.json",
+    "maj7sus4#5.json",
+    "maj7sus4.json",
+    "maj9.json",
+    "majb5.json",
+    "major.json",
+    "mbb5.json",
+    "minor.json",
+    "mmaj11.json",
+    "mmaj13.json",
+    "mmaj7#5.json",
+    "mmaj7.json",
+    "mmaj7b5.json",
+    "mmaj7bb5.json",
+    "mmaj9.json",
+    "sus2#5.json",
+    "sus2.json",
+    "sus2b5.json",
+    "sus2sus4.json",
+    "sus4#5.json",
+    "sus4.json",
+];
+
+let sortedWords = a.sort((x, y) => x.length - y.length);
