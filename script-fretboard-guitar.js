@@ -182,7 +182,7 @@ const showNoteMode = () => {
                 $(`#indicate ${notesClassName[index].replace(".mask", "")}`)
                     .text("")
                     .prepend(
-                        '<img style="width: 20px; left: 0px; top:-2px; position: relative;" src="./img/x.png"/>'
+                        '<img style="width: 20px; left: 0px; top:4px; position: relative;" src="./img/x.png"/>'
                     )
                     .css({
                         color: "#f00",
@@ -468,12 +468,13 @@ $(".wrapper #chord").on("click", () => {
 });
 
 //function for display popup menu
-function showPopupMenu(index) {
+function showPopupMenu(id, title) {
     $(".tab-content #popup-menu").css("display", "unset");
     $(".tab-content #popup-ct").html("");
     // console.log(index);
+    $("#title-popup").text(noteToShow + "-" + title);
     var exclude;
-    switch (index) {
+    switch (id) {
         case 0:
             exclude = [""];
             break;
@@ -505,10 +506,11 @@ function showPopupMenu(index) {
     for (let i of sortedWords) {
         if (exclude.some((substring) => i.includes(substring))) {
             $(".tab-content #popup-ct").append(
-                `<a onclick="changeFileName('${i}')" class="col-5" href="#">${i}</a>`
+                `<a onclick="changeFileName('${i}')" href="#">${i}</a>`
             );
         }
     }
+    $("#popup-ct").scrollLeft(0);
     $(".tab-content #popup-menu").animate({ opacity: 1 }, 200);
 }
 async function changeFileName(fileName) {
@@ -517,6 +519,17 @@ async function changeFileName(fileName) {
     showNoteMode();
     $(".tab-content #popup-menu").css("display", "none");
 }
+$("#popup-ct").on("wheel", function (e) {
+    e.preventDefault();
+
+    var delta = e.originalEvent.deltaY;
+
+    if (delta < 0) {
+        $(this).scrollLeft($(this).scrollLeft() - 300); // Adjust scroll speed as needed
+    } else {
+        $(this).scrollLeft($(this).scrollLeft() + 300); // Adjust scroll speed as needed
+    }
+});
 //event for hide popup menu
 $(".tab-content #popup-menu a").on("click", () => {
     $(".tab-content #popup-menu").animate({ opacity: 0 }, 100);
@@ -548,8 +561,7 @@ $(".dropdown #sw-tone input").change(() => {
 });
 
 async function getDataChord() {
-    console.log(chordFileName);
-    chordVersion = 0;
+    // console.log(chordFileName);
     await fetch(
         `./chords/${noteToShow.replace("#", "sharp")}/${chordFileName}.json`
     )
