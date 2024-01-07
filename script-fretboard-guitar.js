@@ -472,7 +472,7 @@ function showPopupMenu(id, title) {
     $(".tab-content #popup-menu").css("display", "unset");
     $(".tab-content #popup-ct").html("");
     // console.log(index);
-    $("#title-popup").text(noteToShow + "-" + title);
+    $("#title-popup").text(noteToShow + title.toLowerCase());
     var exclude;
     switch (id) {
         case 0:
@@ -514,22 +514,12 @@ function showPopupMenu(id, title) {
     $(".tab-content #popup-menu").animate({ opacity: 1 }, 200);
 }
 async function changeFileName(fileName) {
-    chordFileName = fileName.split(".")[0];
+    chordFileName = fileName;
     await getDataChord();
     showNoteMode();
     $(".tab-content #popup-menu").css("display", "none");
 }
-$("#popup-ct").on("wheel", function (e) {
-    e.preventDefault();
 
-    var delta = e.originalEvent.deltaY;
-
-    if (delta < 0) {
-        $(this).scrollLeft($(this).scrollLeft() - 300); // Adjust scroll speed as needed
-    } else {
-        $(this).scrollLeft($(this).scrollLeft() + 300); // Adjust scroll speed as needed
-    }
-});
 //event for hide popup menu
 $(".tab-content #popup-menu a").on("click", () => {
     $(".tab-content #popup-menu").animate({ opacity: 0 }, 100);
@@ -612,69 +602,69 @@ $(function () {
 });
 
 let a = [
-    "11.json",
-    "13.json",
-    "5.json",
-    "6.json",
-    "6add9.json",
-    "6b5.json",
-    "7#9.json",
-    "7#9b5.json",
-    "7.json",
-    "7b5.json",
-    "7b9.json",
-    "7sus2#5.json",
-    "7sus2.json",
-    "7sus2sus4.json",
-    "7sus4#5.json",
-    "7sus4.json",
-    "9.json",
-    "9b5.json",
-    "9sus4.json",
-    "add9.json",
-    "aug.json",
-    "aug7.json",
-    "aug9.json",
-    "augmaj7.json",
-    "augmaj9.json",
-    "dim.json",
-    "dim7.json",
-    "m#5.json",
-    "m11.json",
-    "m13.json",
-    "m6.json",
-    "m6add9.json",
-    "m7#5.json",
-    "m7.json",
-    "m7b5.json",
-    "m9.json",
-    "maj#11.json",
-    "maj11.json",
-    "maj13.json",
-    "maj7.json",
-    "maj7b5.json",
-    "maj7sus2.json",
-    "maj7sus2sus4.json",
-    "maj7sus4#5.json",
-    "maj7sus4.json",
-    "maj9.json",
-    "majb5.json",
-    "major.json",
-    "mbb5.json",
-    "minor.json",
-    "mmaj11.json",
-    "mmaj13.json",
-    "mmaj7#5.json",
-    "mmaj7.json",
-    "mmaj7b5.json",
-    "mmaj7bb5.json",
-    "mmaj9.json",
-    "sus2#5.json",
-    "sus2.json",
-    "sus2b5.json",
-    "sus2sus4.json",
-    "sus4#5.json",
-    "sus4.json",
+    "11",
+    "13",
+    "5",
+    "6",
+    "6add9",
+    "6b5",
+    "7#9",
+    "7#9b5",
+    "7",
+    "7b5",
+    "7b9",
+    "7sus2#5",
+    "7sus2",
+    "7sus2sus4",
+    "7sus4#5",
+    "7sus4",
+    "9",
+    "9b5",
+    "9sus4",
+    "add9",
+    "aug",
+    "aug7",
+    "aug9",
+    "augmaj7",
+    "augmaj9",
+    "dim",
+    "dim7",
+    "m#5",
+    "m11",
+    "m13",
+    "m6",
+    "m6add9",
+    "m7#5",
+    "m7",
+    "m7b5",
+    "m9",
+    "maj#11",
+    "maj11",
+    "maj13",
+    "maj7",
+    "maj7b5",
+    "maj7sus2",
+    "maj7sus2sus4",
+    "maj7sus4#5",
+    "maj7sus4",
+    "maj9",
+    "majb5",
+    "major",
+    "mbb5",
+    "minor",
+    "mmaj11",
+    "mmaj13",
+    "mmaj7#5",
+    "mmaj7",
+    "mmaj7b5",
+    "mmaj7bb5",
+    "mmaj9",
+    "sus2#5",
+    "sus2",
+    "sus2b5",
+    "sus2sus4",
+    "sus4#5",
+    "sus4",
 ];
 
 let sortedWords = a.sort((x, y) => x.length - y.length);
