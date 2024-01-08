@@ -89,7 +89,9 @@ resetNote();
 resetFinger();
 function changeNoteName() {
     $("#chord-name #note").text(noteToShow);
-    $("#chord-name #suffix").text(chordFileName);
+    $("#chord-name #suffix").text(
+        chordFileName == "major" ? "" : chordFileName
+    );
 
     $("#chord-name #speak").text(
         noteToSpeak[noteToShow] + " " + noteToSpeak[chordFileName]
@@ -211,20 +213,20 @@ const showNoteMode = () => {
                         '<img style="width: 20px; left: 0px; top:4px; position: relative;" src="./img/x.png"/>'
                     )
                     .css({
-                            color: "#f00",
-                            "background-color": "rgb(254 244 229)",
-                        })
+                        color: "#f00",
+                        "background-color": "rgb(254 244 229)",
+                    })
                     .animate(500);
             } else if (fret == "0") {
                 $(`#indicate ${notesClassName[index].replace(".mask", "")}`)
                     .text(openNote[index])
                     .css({
-                            color: "#fff",
-                            "background-color":
-                                noteToShow == openNote[index]
-                                    ? "#007D1D"
-                                    : "#fa990f",
-                        })
+                        color: "#fff",
+                        "background-color":
+                            noteToShow == openNote[index]
+                                ? "#007D1D"
+                                : "#fa990f",
+                    })
                     .animate(500);
             } else if (fret != "x" && fret != "0") {
                 fret = convToDec(fret.toUpperCase());
@@ -246,12 +248,12 @@ const showNoteMode = () => {
                 $(`#indicate ${notesClassName[index].replace(".mask", "")}`)
                     .text(openNote[index])
                     .css({
-                            color: "rgb(134 124 108)",
-                            "background-color": "rgb(254 244 229)",
-                        })
+                        color: "rgb(134 124 108)",
+                        "background-color": "rgb(254 244 229)",
+                    })
                     .animate(500);
                 currentFret = Math.min(currentFret, fret);
-$(
+                $(
                     `.notes ${notesClassName[index]} ul li[note-number="${fret}"]`
                 ).animate({ opacity: 1 }, 500);
             }
@@ -315,20 +317,20 @@ const showFingerMode = () => {
                         '<img style="width: 20px; left: 0px; top:4px; position: relative;" src="./img/x.png"/>'
                     )
                     .css({
-                            color: "#f00",
-                            "background-color": "rgb(254 244 229)",
-                        })
+                        color: "#f00",
+                        "background-color": "rgb(254 244 229)",
+                    })
                     .animate(500);
             } else if (fret == "0") {
                 $(`#indicate ${notesClassName[index].replace(".mask", "")}`)
                     .text(openNote[index])
                     .css({
-                            color: "#fff",
-                            "background-color":
-                                noteToShow == openNote[index]
-                                    ? "#007D1D"
-                                    : "#fa990f",
-                        })
+                        color: "#fff",
+                        "background-color":
+                            noteToShow == openNote[index]
+                                ? "#007D1D"
+                                : "#fa990f",
+                    })
                     .animate(500);
             } else if (fret != "x") {
                 fret = convToDec(fret.toUpperCase());
@@ -341,9 +343,9 @@ const showFingerMode = () => {
                 $(`#indicate ${notesClassName[index].replace(".mask", "")}`)
                     .text(openNote[index])
                     .css({
-                            color: "rgb(134 124 108)",
-                            "background-color": "rgb(254 244 229)",
-                        })
+                        color: "rgb(134 124 108)",
+                        "background-color": "rgb(254 244 229)",
+                    })
                     .animate(500);
             }
         });
@@ -378,7 +380,9 @@ function resetFinger() {
 async function resetNote() {
     $("#barres").css({ opacity: 0 });
     // $(".notes .mask ul").text("");
-    $(".guitar-neck li[note-number]").animate({ opacity: 0 }, 500);
+    $(".guitar-neck li[note-number]")
+        .css({ "background-color": "#fa990f" })
+        .animate({ opacity: 0 }, 500);
 }
 
 function init() {
