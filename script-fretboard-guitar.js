@@ -473,7 +473,9 @@ function showPopupMenu(id, title) {
     $(".tab-content #popup-ct").html("");
     // console.log(index);
     $("#title-popup").text(noteToShow + title.toLowerCase());
-    var exclude;
+    var exclude,
+        slashChord = true;
+
     switch (id) {
         case 0:
             exclude = [""];
@@ -494,7 +496,22 @@ function showPopupMenu(id, title) {
             exclude = ["7"];
             break;
         case 6:
-            exclude = ["_"];
+            exclude = [""];
+            slashChord = false;
+            notes.e.forEach((n) => {
+                if (n != noteToShow) {
+                    for (let i of sortedWords) {
+                        if (
+                            exclude.some((substring) => i.includes(substring))
+                        ) {
+                            i = i + "_" + n.toLowerCase();
+                            $(".tab-content #popup-ct").append(
+                                `<a onclick="changeFileName('${i}')" href="#">${i}</a>`
+                            );
+                        }
+                    }
+                }
+            });
             break;
         case 7:
             exclude = ["maj7"];
@@ -503,11 +520,13 @@ function showPopupMenu(id, title) {
         default:
             break;
     }
-    for (let i of sortedWords) {
-        if (exclude.some((substring) => i.includes(substring))) {
-            $(".tab-content #popup-ct").append(
-                `<a onclick="changeFileName('${i}')" href="#">${i}</a>`
-            );
+    if (slashChord) {
+        for (let i of sortedWords) {
+            if (exclude.some((substring) => i.includes(substring))) {
+                $(".tab-content #popup-ct").append(
+                    `<a onclick="changeFileName('${i}')" href="#">${i}</a>`
+                );
+            }
         }
     }
     $("#popup-ct").scrollLeft(0);
@@ -551,10 +570,12 @@ $(".dropdown #sw-tone input").change(() => {
 });
 
 async function getDataChord() {
-    // console.log(chordFileName);
-    await fetch(
-        `./chords/${noteToShow.replace("#", "sharp")}/${chordFileName}.json`
-    )
+    const encodedChordFileName = encodeURIComponent(chordFileName);
+    const url = `./chords/${noteToShow.replace(
+        "#",
+        "sharp"
+    )}/${encodedChordFileName}.json`;
+    await fetch(url)
         .then((response) => response.json())
         .then((data) => {
             // console.log(data);
@@ -566,7 +587,13 @@ async function getDataChord() {
 }
 
 $(".dropdown #sw-minor input").change(async () => {
-    chordFileName = chordFileName == "major" ? "minor" : "major";
+    // chordFileName = chordFileName == "major" ? "minor" : "major";
+    const element = $("#sw-minor small");
+    const afterContent = window
+        .getComputedStyle(element[0], "::after")
+        .getPropertyValue("content");
+    chordFileName = afterContent.toLocaleLowerCase().slice(1, -1);
+    console.log(chordFileName);
     await getDataChord();
     currentFret = 6;
 
@@ -666,5 +693,5 @@ let a = [
     "sus4#5",
     "sus4",
 ];
-
+$("#sw-minor small").click();
 let sortedWords = a.sort((x, y) => x.length - y.length);
