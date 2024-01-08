@@ -167,7 +167,16 @@ h1 {
     background: rgb(79, 197, 197);
     transition: all 0.3s ease 0s;
 }
-
+#chord-name {
+    padding-right: 47px;
+}
+#chord-name #note {
+    font-size: 50px;
+    font-family: 'Times New Roman', Times, serif;
+}
+#chord-name #suffix {
+    font-size: 30px;
+}
 .switch input:checked ~ small::before {
     transform: translate(41px, 0px);
     transition: all 0.3s ease 0s;

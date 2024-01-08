@@ -68,10 +68,36 @@ var thang = {
     "G#": "Ab",
     "A#": "Bb",
 };
+var noteToSpeak = {
+    C: "Đô",
+    "C#": "Đô Thăng",
+    D: "Rê",
+    "D#": "Rê Thăng",
+    E: "Mi",
+    F: "Fa",
+    "F#": "Fa Thăng",
+    G: "Sol",
+    "G#": "Sol Thăng",
+    A: "La",
+    "A#": "La Thăng",
+    B: "Si",
+    major: "Trưởng",
+    minor: "Thứ",
+};
+
 //render notes and fingers
 resetNote();
 resetFinger();
+function changeNoteName() {
+    $("#chord-name #note").text(noteToShow);
+    $("#chord-name #suffix").text(chordFileName);
+
+    $("#chord-name #speak").text(
+        noteToSpeak[noteToShow] + " " + noteToSpeak[chordFileName]
+    );
+}
 function goCurrentFret() {
+    changeNoteName();
     if (currentFret < 3) currentFret = 1;
     // console.log("fret: " + currentFret);
     document
@@ -90,7 +116,7 @@ $(".dropdown #down").click(function () {
 
         if (fretOrFinger == "finger") showFingerMode();
         else showNoteMode();
-        // $(".tab-content #chord-version").text(chordVersion + 1);
+        $(".tab-content #chord-version").text(chordVersion + 1);
     } else {
         if (currentFret < 7) currentFret = 8;
         else if (currentFret < 20) {
@@ -134,7 +160,7 @@ $(".dropdown #up").click(function () {
         if (fretOrFinger == "fret") showNoteMode();
         else showFingerMode();
         // console.log("chord version: " + chordVersion);
-        // $(".tab-content #chord-version").text(chordVersion + 1);
+        $(".tab-content #chord-version").text(chordVersion + 1);
     } else {
         canClick = false;
         if (currentFret == 1) currentFret = 20;
@@ -174,6 +200,7 @@ const showNoteMode = () => {
             ".mask.b",
             ".mask.high-e",
         ];
+        $(".tab-content #chord-version").text(1);
 
         [...chordActive[chordVersion]["frets"]].forEach((fret, index) => {
             // console.log(fret);
@@ -206,15 +233,17 @@ const showNoteMode = () => {
                 var note = $(
                     `.notes ${notesClassName[index]} ul li[note-number="${fret}"]`
                 ).html();
-
+                var noteColor = "#fa990f";
                 if (
                     note == noteToShow ||
                     (note == thang[noteToShow] && thang[noteToShow])
                 ) {
-                    $(
-                        `.notes ${notesClassName[index]} ul li[note-number="${fret}"]`
-                    ).css({ "background-color": "#007D1D" });
+                    noteColor = "#007D1D";
                 }
+                $(
+                    `.notes ${notesClassName[index]} ul li[note-number="${fret}"]`
+                ).css({ "background-color": noteColor });
+
                 $(`#indicate ${notesClassName[index].replace(".mask", "")}`)
                     .text(openNote[index])
                     .css({
@@ -580,19 +609,22 @@ async function getDataChord() {
         .then((data) => {
             // console.log(data);
             chordActive = data["positions"];
+            $("#chord-name #noc").text(chordActive.length);
         })
         .catch((error) => {
             console.error("Error fetching data:", error);
         });
 }
-
-$(".dropdown #sw-minor input").change(async () => {
-    // chordFileName = chordFileName == "major" ? "minor" : "major";
+const currentFileName = () => {
     const element = $("#sw-minor small");
     const afterContent = window
         .getComputedStyle(element[0], "::after")
         .getPropertyValue("content");
     chordFileName = afterContent.toLocaleLowerCase().slice(1, -1);
+};
+$(".dropdown #sw-minor input").change(async () => {
+    // chordFileName = chordFileName == "major" ? "minor" : "major";
+    currentFileName();
     console.log(chordFileName);
     await getDataChord();
     currentFret = 6;

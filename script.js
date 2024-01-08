@@ -39,6 +39,7 @@ document.querySelectorAll("div.tab").forEach((x) => {
                 chordVersion = 0;
                 currentFret = 6;
                 // console.log(noteToShow);
+                currentFileName();
                 await getDataChord();
                 if (floatingMenu == "note") {
                     showNotes(chordTab1[index]);
