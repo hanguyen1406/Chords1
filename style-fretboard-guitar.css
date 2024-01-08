@@ -86,14 +86,6 @@ h1 {
     font-size: 20px;
 }
 
-.wrap {
-    width: 80%;
-    position: absolute;
-    top: 50px;
-    left: 50%;
-    transform: translate(-50%, -50%);
-}
-
 .tab-content #popup-menu {
     width: 90%;
     max-width: 300px;
@@ -169,10 +161,10 @@ h1 {
 }
 #chord-name {
     padding-right: 47px;
+    font-family: 'Times New Roman', Times, serif;
 }
 #chord-name #note {
     font-size: 50px;
-    font-family: 'Times New Roman', Times, serif;
 }
 #chord-name #suffix {
     font-size: 30px;
