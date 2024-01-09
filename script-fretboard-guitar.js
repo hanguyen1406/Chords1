@@ -499,68 +499,94 @@ $(".wrapper #chord").on("click", () => {
 });
 
 //function for display popup menu
+var popupCt = $(".tab-content #popup-ct"),
+    chordFilter = $("#chord-filter");
 function showPopupMenu(id, title) {
-    $(".tab-content #popup-menu").css("display", "unset");
-    $(".tab-content #popup-ct").html("");
+    $(".tab-content #popup-menu").css("display", "block");
+    popupCt.html("");
+    chordFilter.html("");
     // console.log(index);
-    $("#title-popup").text(noteToShow + title.toLowerCase());
+    $("#title-popup").text(noteToShow + "(" + title.toLowerCase() + ")");
     var exclude,
         slashChord = true;
 
-    switch (id) {
-        case 0:
-            exclude = [""];
-            break;
-        case 1:
-            exclude = ["maj"];
-            break;
-        case 2:
-            exclude = ["minor"];
-            break;
-        case 3:
-            exclude = ["6"];
-            break;
-        case 4:
-            exclude = ["sus"];
-            break;
-        case 5:
-            exclude = ["7"];
-            break;
-        case 6:
-            exclude = [""];
-            slashChord = false;
-            notes.e.forEach((n) => {
-                if (n != noteToShow) {
-                    for (let i of sortedWords) {
-                        if (
-                            exclude.some((substring) => i.includes(substring))
-                        ) {
-                            i = i + "_" + n.toLowerCase();
-                            $(".tab-content #popup-ct").append(
-                                `<a onclick="changeFileName('${i}')" href="#">${i}</a>`
-                            );
-                        }
-                    }
-                }
-            });
-            break;
-        case 7:
-            exclude = ["maj7"];
-            break;
-
-        default:
-            break;
-    }
-    if (slashChord) {
-        for (let i of sortedWords) {
-            if (exclude.some((substring) => i.includes(substring))) {
-                $(".tab-content #popup-ct").append(
+    if (id < 4) {
+        // console.log("first");
+        [
+            `All ${noteToShow} ${title}`,
+            "Major",
+            "Minor",
+            "Sus",
+            "Slash Chords",
+        ].forEach((i) => {
+            chordFilter.append(
+                `<a onclick="changeFileName('${i}')" href="#">${i}</a>`
+            );
+        });
+    } else {
+        // console.log("second");
+        [`All ${noteToShow} ${title}`, "Basic", "6", "7", "Maj7"].forEach(
+            (i) => {
+                chordFilter.append(
                     `<a onclick="changeFileName('${i}')" href="#">${i}</a>`
                 );
             }
-        }
+        );
     }
-    $("#popup-ct").scrollLeft(0);
+    // switch (id) {
+    //     case 0:
+    //         exclude = [""];
+    //         break;
+    //     case 1:
+    //         exclude = ["maj"];
+    //         break;
+    //     case 2:
+    //         exclude = ["minor"];
+    //         break;
+    //     case 3:
+    //         exclude = ["6"];
+    //         break;
+    //     case 4:
+    //         exclude = ["sus"];
+    //         break;
+    //     case 5:
+    //         exclude = ["7"];
+    //         break;
+    //     case 6:
+    //         exclude = [""];
+    //         slashChord = false;
+    //         notes.e.forEach((n) => {
+    //             if (n != noteToShow) {
+    //                 for (let i of sortedWords) {
+    //                     if (
+    //                         exclude.some((substring) => i.includes(substring))
+    //                     ) {
+    //                         i = i + "_" + n.toLowerCase();
+    //                         $(".tab-content #popup-ct").append(
+    //                             `<a onclick="changeFileName('${i}')" href="#">${i}</a>`
+    //                         );
+    //                     }
+    //                 }
+    //             }
+    //         });
+    //         break;
+    //     case 7:
+    //         exclude = ["maj7"];
+    //         break;
+
+    //     default:
+    //         break;
+    // }
+    // if (slashChord) {
+    //     for (let i of sortedWords) {
+    //         if (exclude.some((substring) => i.includes(substring))) {
+    //             $(".tab-content #popup-ct").append(
+    //                 `<a onclick="changeFileName('${i}')" href="#">${i}</a>`
+    //             );
+    //         }
+    //     }
+    // }
+    // $("#popup-ct").scrollLeft(0);
     $(".tab-content #popup-menu").animate({ opacity: 1 }, 200);
 }
 async function changeFileName(fileName) {
@@ -614,6 +640,7 @@ async function getDataChord() {
         .catch((error) => {
             console.error("Error fetching data:", error);
         });
+    chordVersion = 0;
 }
 const currentFileName = () => {
     const element = $("#sw-minor small");

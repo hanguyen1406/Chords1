@@ -2,7 +2,8 @@
     font-family: "Source Sans Pro";
     font-style: normal;
     font-weight: 400;
-    src: url("https://fonts.gstatic.com/s/sourcesanspro/v22/6xK3dSBYKcSV-LCoeQqfX1RYOo3qOK7g.ttf") format("truetype");
+    src: url("https://fonts.gstatic.com/s/sourcesanspro/v22/6xK3dSBYKcSV-LCoeQqfX1RYOo3qOK7g.ttf")
+        format("truetype");
 }
 
 * {
@@ -97,9 +98,10 @@ h1 {
     left: 50%;
     transform: translate(-50%, -50%);
     border-radius: 10px;
-    display: none;
     opacity: 0;
-    box-shadow: rgba(0, 0, 0, 0.19) 0px 10px 20px, rgba(0, 0, 0, 0.23) 0px 6px 6px;
+    box-shadow: rgba(0, 0, 0, 0.19) 0px 10px 20px,
+        rgba(0, 0, 0, 0.23) 0px 6px 6px;
+    display: none;
 }
 
 .tab-content .child {
@@ -161,7 +163,7 @@ h1 {
 }
 #chord-name {
     padding-right: 47px;
-    font-family: 'Times New Roman', Times, serif;
+    font-family: "Times New Roman", Times, serif;
 }
 #chord-name #note {
     font-size: 50px;
@@ -492,7 +494,11 @@ h1 {
     gap: 5px;
 }
 
-.controls .control-chord .control-header .checkbox-show-note input[type="checkbox"] {
+.controls
+    .control-chord
+    .control-header
+    .checkbox-show-note
+    input[type="checkbox"] {
     width: 40px;
 }
 
