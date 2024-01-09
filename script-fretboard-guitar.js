@@ -519,76 +519,77 @@ function showPopupMenu(id, title) {
             "Sus",
             "Slash Chords",
         ].forEach((i) => {
-            chordFilter.append(
-                `<a onclick="changeFileName('${i}')" href="#">${i}</a>`
-            );
+            chordFilter.append(`<a onclick="" href="#">${i}</a>`);
         });
     } else {
         // console.log("second");
         [`All ${noteToShow} ${title}`, "Basic", "6", "7", "Maj7"].forEach(
             (i) => {
-                chordFilter.append(
-                    `<a onclick="changeFileName('${i}')" href="#">${i}</a>`
-                );
+                chordFilter.append(`<a onclick="" href="#">${i}</a>`);
             }
         );
     }
-    // switch (id) {
-    //     case 0:
-    //         exclude = [""];
-    //         break;
-    //     case 1:
-    //         exclude = ["maj"];
-    //         break;
-    //     case 2:
-    //         exclude = ["minor"];
-    //         break;
-    //     case 3:
-    //         exclude = ["6"];
-    //         break;
-    //     case 4:
-    //         exclude = ["sus"];
-    //         break;
-    //     case 5:
-    //         exclude = ["7"];
-    //         break;
-    //     case 6:
-    //         exclude = [""];
-    //         slashChord = false;
-    //         notes.e.forEach((n) => {
-    //             if (n != noteToShow) {
-    //                 for (let i of sortedWords) {
-    //                     if (
-    //                         exclude.some((substring) => i.includes(substring))
-    //                     ) {
-    //                         i = i + "_" + n.toLowerCase();
-    //                         $(".tab-content #popup-ct").append(
-    //                             `<a onclick="changeFileName('${i}')" href="#">${i}</a>`
-    //                         );
-    //                     }
-    //                 }
-    //             }
-    //         });
-    //         break;
-    //     case 7:
-    //         exclude = ["maj7"];
-    //         break;
+    chordFilter.children("a:first").css({ "background-color": "green" });
 
-    //     default:
-    //         break;
-    // }
-    // if (slashChord) {
-    //     for (let i of sortedWords) {
-    //         if (exclude.some((substring) => i.includes(substring))) {
-    //             $(".tab-content #popup-ct").append(
-    //                 `<a onclick="changeFileName('${i}')" href="#">${i}</a>`
-    //             );
-    //         }
-    //     }
-    // }
-    // $("#popup-ct").scrollLeft(0);
+    switch (id) {
+        case 0:
+            exclude = [""];
+            break;
+        case 1:
+            exclude = ["6"];
+            break;
+        case 2:
+            exclude = ["7"];
+            break;
+        case 3:
+            exclude = ["maj7"];
+            break;
+        case 4:
+            exclude = ["maj"];
+            break;
+        case 5:
+            exclude = ["min"];
+            break;
+        case 6:
+            exclude = ["sus"];
+            break;
+        case 7:
+            exclude = [""];
+            slashChord = false;
+            notes.e.forEach((n) => {
+                if (n != noteToShow) {
+                    for (let i of sortedWords) {
+                        if (
+                            exclude.some((substring) => i.includes(substring))
+                        ) {
+                            i = i + "_" + n.toLowerCase();
+                            $(".tab-content #popup-ct").append(
+                                `<a onclick="changeFileName('${i}')" href="#">${i}</a>`
+                            );
+                        }
+                    }
+                }
+            });
+            break;
+
+        default:
+            break;
+    }
+    if (slashChord) {
+        for (let i of sortedWords) {
+            if (exclude.some((substring) => i.includes(substring))) {
+                $(".tab-content #popup-ct").append(
+                    `<a onclick="changeFileName('${i}')" href="#">${i}</a>`
+                );
+            }
+        }
+    }
+    $("#popup-ct").scrollLeft(0);
     $(".tab-content #popup-menu").animate({ opacity: 1 }, 200);
 }
+
+function filterChord(first, second) {}
+
 async function changeFileName(fileName) {
     chordFileName = fileName;
     await getDataChord();
@@ -597,7 +598,7 @@ async function changeFileName(fileName) {
 }
 
 //event for hide popup menu
-$("#popup-menu a").on("click", () => {
+$("#exit").on("click", () => {
     $("#popup-menu").animate({ opacity: 0 }, 100);
     setTimeout(() => {
         $("#popup-menu").css("display", "none");
@@ -687,79 +688,79 @@ $(function () {
     });
 });
 
-let a = [
-    "11",
-    "13",
+let sortedWords = [
     "5",
     "6",
-    "6add9",
+    "7",
+    "9",
+    "11",
+    "13",
+    "m6",
+    "m7",
+    "m9",
     "6b5",
     "7#9",
-    "7#9b5",
-    "7",
     "7b5",
     "7b9",
-    "7sus2#5",
-    "7sus2",
-    "7sus2sus4",
-    "7sus4#5",
-    "7sus4",
-    "9",
     "9b5",
-    "9sus4",
-    "add9",
     "aug",
-    "aug7",
-    "aug9",
-    "augmaj7",
-    "augmaj9",
     "dim",
-    "dim7",
     "m#5",
     "m11",
     "m13",
-    "m6",
-    "m6add9",
+    "add9",
+    "aug7",
+    "aug9",
+    "dim7",
     "m7#5",
-    "m7",
     "m7b5",
-    "m9",
-    "maj#11",
+    "maj7",
+    "maj9",
+    "mbb5",
+    "sus2",
+    "sus4",
+    "6add9",
+    "7#9b5",
+    "7sus2",
+    "7sus4",
+    "9sus4",
     "maj11",
     "maj13",
-    "maj7",
-    "maj7b5",
-    "maj7sus2",
-    "maj7sus2sus4",
-    "maj7sus4#5",
-    "maj7sus4",
-    "maj9",
     "majb5",
     "major",
-    "mbb5",
     "minor",
+    "mmaj7",
+    "mmaj9",
+    "m6add9",
+    "maj#11",
+    "maj7b5",
     "mmaj11",
     "mmaj13",
-    "mmaj7#5",
-    "mmaj7",
-    "mmaj7b5",
-    "mmaj7bb5",
-    "mmaj9",
     "sus2#5",
-    "sus2",
     "sus2b5",
-    "sus2sus4",
     "sus4#5",
-    "sus4",
+    "7sus2#5",
+    "7sus4#5",
+    "augmaj7",
+    "augmaj9",
+    "mmaj7#5",
+    "mmaj7b5",
+    "maj7sus2",
+    "maj7sus4",
+    "mmaj7bb5",
+    "sus2sus4",
+    "7sus2sus4",
+    "maj7sus4#5",
+    "maj7sus2sus4",
 ];
 $("#sw-minor small").click();
-let sortedWords = a.sort((x, y) => x.length - y.length);
-
-$(document).ready(function(){ 
-    $('.tab-a').click(function(){  
-      $(".ta").removeClass('tab-active');
-      $(".ta[data-id='"+$(this).attr('data-id')+"']").addClass("tab-active");
-      $(".tab-a").removeClass('active-a');
-      $(this).parent().find(".tab-a").addClass('active-a');
-     });
+$(document).ready(function () {
+    $(".tab-a").click(function () {
+        $(".ta").removeClass("tab-active");
+        $(".ta[data-id='" + $(this).attr("data-id") + "']").addClass(
+            "tab-active"
+        );
+        $(".tab-a").removeClass("active-a");
+        $(this).parent().find(".tab-a").addClass("active-a");
+    });
 });

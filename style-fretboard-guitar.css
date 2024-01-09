@@ -31,11 +31,11 @@ h1 {
 
 #popup-ct {
     overflow: hidden scroll;
-    margin-top: 47px;
     position: relative;
-    max-height: 210px;
+    max-height: 175px;
     display: flex;
     flex-wrap: wrap;
+    padding-bottom: 5px;
 }
 
 #popup-ct a {
@@ -103,12 +103,6 @@ h1 {
         rgba(0, 0, 0, 0.23) 0px 6px 6px;
     display: none;
 }
-.tab-container {
-    margin: 5% 10%;
-    background-color: #c1e3d9;
-    padding: 3%;
-    border-radius: 4px;
-}
 .tab-menu ul {
     margin: 0;
     padding: 0;
@@ -121,8 +115,9 @@ h1 {
     text-decoration: none;
     color: rgba(0, 0, 0, 0.4);
     background-color: #b4cbc4;
-    padding: 7px 25px;
     border-radius: 20px;
+    font-size: 14px;
+    padding:0px 7px
 }
 .tab-menu ul li a.active-a {
     background-color: #588d7d;
