@@ -754,3 +754,12 @@ let a = [
 ];
 $("#sw-minor small").click();
 let sortedWords = a.sort((x, y) => x.length - y.length);
+
+$(document).ready(function(){ 
+    $('.tab-a').click(function(){  
+      $(".ta").removeClass('tab-active');
+      $(".ta[data-id='"+$(this).attr('data-id')+"']").addClass("tab-active");
+      $(".tab-a").removeClass('active-a');
+      $(this).parent().find(".tab-a").addClass('active-a');
+     });
+});
