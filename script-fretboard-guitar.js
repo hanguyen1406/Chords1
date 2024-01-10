@@ -386,6 +386,8 @@ async function resetNote() {
 }
 
 function init() {
+    $("ul.compartment-number").text("");
+    $(".mask.low-e ul").text("");
     for (let i = 1; i <= 24; i++) {
         $("ul.compartment-number").append(`<li>${i}</li>`);
     }
@@ -512,22 +514,18 @@ function showPopupMenu(id, title) {
 
     if (id < 4) {
         // console.log("first");
-        [
-            `All ${noteToShow} ${title}`,
-            "Major",
-            "Minor",
-            "Sus",
-            "Slash Chords",
-        ].forEach((i) => {
-            chordFilter.append(`<a onclick="" href="#">${i}</a>`);
+        [`All`, "Major", "Minor", "Sus", "Slash Chords"].forEach((i, index) => {
+            chordFilter.append(
+                `<a onclick="filterChord(${index}, '${title}', '${i}')" href="#">${i}</a>`
+            );
         });
     } else {
         // console.log("second");
-        [`All ${noteToShow} ${title}`, "Basic", "6", "7", "Maj7"].forEach(
-            (i) => {
-                chordFilter.append(`<a onclick="" href="#">${i}</a>`);
-            }
-        );
+        [`All`, "Basic", "6", "7", "Maj7"].forEach((i, index) => {
+            chordFilter.append(
+                `<a onclick="filterChord(${index}, '${title}', '${i}')" href="#">${i}</a>`
+            );
+        });
     }
     chordFilter.children("a:first").css({ "background-color": "green" });
 
@@ -556,20 +554,19 @@ function showPopupMenu(id, title) {
         case 7:
             exclude = [""];
             slashChord = false;
-            notes.e.forEach((n) => {
-                if (n != noteToShow) {
-                    for (let i of sortedWords) {
-                        if (
-                            exclude.some((substring) => i.includes(substring))
-                        ) {
-                            i = i + "_" + n.toLowerCase();
-                            $(".tab-content #popup-ct").append(
-                                `<a onclick="changeFileName('${i}')" href="#">${i}</a>`
-                            );
-                        }
+            n = notes.e[0];
+            if (n != noteToShow) {
+                for (let i of sortedWords) {
+                    if (exclude.some((substring) => i.includes(substring))) {
+                        i = i + "_" + n.toLowerCase();
+                        $(".tab-content #popup-ct").append(
+                            `<a onclick="changeFileName('${i}')" href="#">${i}</a>`
+                        );
                     }
                 }
-            });
+            }
+            $(".tab-content #popup-ct").append(`<div id="load-more"><b>Load more</b></div>`);
+
             break;
 
         default:
@@ -588,7 +585,24 @@ function showPopupMenu(id, title) {
     $(".tab-content #popup-menu").animate({ opacity: 1 }, 200);
 }
 
-function filterChord(first, second) {}
+function filterChord(i, first, second) {
+    chordFilter.children("a").css({ "background-color": "#276091" });
+    chordFilter.children("a").eq(i).css({ "background-color": "green" });
+
+    if (second.split(" ")[0] == "All") {
+        $("#popup-ct a").css({ display: "unset" });
+        // console.log(second.split(" "));
+    } else if (second == "Slash Chords") {
+        console.log("slash chord");
+    } else {
+        $("#popup-ct a").each((i, elem) => {
+            var e = $(elem);
+            if (!e.text().includes(second.slice(0, 3).toLowerCase())) {
+                e.css({ display: "none" });
+            } else e.css({ display: "unset" });
+        });
+    }
+}
 
 async function changeFileName(fileName) {
     chordFileName = fileName;
@@ -614,6 +628,7 @@ $("#sw-tone input").change(() => {
 
     chordTab1 = chordTab2;
     chordTab2 = temp2;
+    init();
     resetNote();
     resetFinger();
     if (floatingMenu == "chord") {
@@ -622,6 +637,7 @@ $("#sw-tone input").change(() => {
         barres.animate({ top: `${currentFret * 80}px` }, 500);
     } else if (floatingMenu == "note") {
         showNotes(chordTab1[currentTab]);
+        console.log(chordTab1[currentTab]);
     }
 });
 

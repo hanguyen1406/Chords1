@@ -103,6 +103,14 @@ h1 {
         rgba(0, 0, 0, 0.23) 0px 6px 6px;
     display: none;
 }
+#load-more {
+    width: 300px;
+    text-align: center;
+}
+#popup-menu .tab-container .tab-menu  ul {
+    text-align: start;
+    padding-left: 5px;
+}
 .tab-menu ul {
     margin: 0;
     padding: 0;
@@ -117,7 +125,9 @@ h1 {
     background-color: #b4cbc4;
     border-radius: 20px;
     font-size: 14px;
-    padding:0px 7px
+    padding:0px 7px;
+    top: -2px;
+    position:relative
 }
 .tab-menu ul li a.active-a {
     background-color: #588d7d;
