@@ -481,7 +481,7 @@ $(".wrapper #note").on("click", () => {
 });
 
 //show chord
-$(".wrapper #chord").on("click", () => {
+$(".wrapper #chord").on("click",async () => {
     // $("").css("visibility", "unset");
     $(".dropdown #chord-class").animate(
         {
@@ -497,12 +497,19 @@ $(".wrapper #chord").on("click", () => {
 
     $(".tab-content #chord-name b").animate({ opacity: 1 }, 500);
     floatingMenu = "chord";
-    showNoteMode(chordSymbol);
+    currentFileName();
+    await getDataChord();
+    if (fretOrFinger == "finger") {
+        showFingerMode();
+    } else {
+        showNoteMode();
+    }
 });
 
 //function for display popup menu
 var popupCt = $(".tab-content #popup-ct"),
-    chordFilter = $("#chord-filter");
+    chordFilter = $("#chord-filter"),
+    nol = 0;
 function showPopupMenu(id, title) {
     $(".tab-content #popup-menu").css("display", "block");
     popupCt.html("");
@@ -528,6 +535,7 @@ function showPopupMenu(id, title) {
         });
     }
     chordFilter.children("a:first").css({ "background-color": "green" });
+    nol = 0;
 
     switch (id) {
         case 0:
@@ -554,7 +562,8 @@ function showPopupMenu(id, title) {
         case 7:
             exclude = [""];
             slashChord = false;
-            n = notes.e[0];
+            n = notes.e[nol];
+
             if (n != noteToShow) {
                 for (let i of sortedWords) {
                     if (exclude.some((substring) => i.includes(substring))) {
@@ -565,7 +574,29 @@ function showPopupMenu(id, title) {
                     }
                 }
             }
-            $(".tab-content #popup-ct").append(`<div id="load-more"><b>Load more</b></div>`);
+            $(".tab-content #popup-ct").append(
+                `<div id="load-more"><b>Load more</b></div>`
+            );
+
+            console.log(nol);
+
+            $("#load-more").on("click", () => {
+                console.log("hii");
+                n = notes.e[++nol];
+
+                if (n != noteToShow) {
+                    for (let i of sortedWords) {
+                        if (
+                            exclude.some((substring) => i.includes(substring))
+                        ) {
+                            i = i + "_" + n.toLowerCase();
+                            $("#load-more").before(
+                                `<a onclick="changeFileName('${i}')" href="#">${i}</a>`
+                            );
+                        }
+                    }
+                }
+            });
 
             break;
 
@@ -581,11 +612,12 @@ function showPopupMenu(id, title) {
             }
         }
     }
-    $("#popup-ct").scrollLeft(0);
+    $("#popup-ct").scrollTop(0);
     $(".tab-content #popup-menu").animate({ opacity: 1 }, 200);
 }
 
 function filterChord(i, first, second) {
+    $("#popup-ct").scrollTop(0);
     chordFilter.children("a").css({ "background-color": "#276091" });
     chordFilter.children("a").eq(i).css({ "background-color": "green" });
 
@@ -647,6 +679,7 @@ async function getDataChord() {
         "#",
         "sharp"
     )}/${encodedChordFileName}.json`;
+    // console.log(url);
     await fetch(url)
         .then((response) => response.json())
         .then((data) => {
