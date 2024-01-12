@@ -109,7 +109,7 @@ h1 {
     width: 300px;
     text-align: center;
 }
-#popup-menu .tab-container .tab-menu  ul {
+#popup-menu .tab-container .tab-menu ul {
     text-align: start;
     padding-left: 5px;
 }
@@ -127,9 +127,9 @@ h1 {
     background-color: #b4cbc4;
     border-radius: 20px;
     font-size: 14px;
-    padding:0px 7px;
+    padding: 0px 7px;
     top: -2px;
-    position:relative
+    position: relative;
 }
 .tab-menu ul li a.active-a {
     background-color: #588d7d;
@@ -199,14 +199,17 @@ h1 {
     transition: all 0.3s ease 0s;
 }
 #chord-name {
-    padding-right: 47px;
     font-family: "Times New Roman", Times, serif;
+    width: fit-content;
+    display: inline;
+    top: -8px;
+    position:relative
 }
 #chord-name #note {
-    font-size: 50px;
+    font-size: 40px;
 }
 #chord-name #suffix {
-    font-size: 30px;
+    font-size: 23px;
 }
 .switch input:checked ~ small::before {
     transform: translate(41px, 0px);
@@ -272,7 +275,10 @@ h1 {
     overflow: hidden scroll;
     padding-left: 27px;
 }
-
+#speak {
+    top: -10px;
+    position: relative;
+}
 .fretboard::-webkit-scrollbar {
     width: 10px;
 }

@@ -13,7 +13,7 @@
 }
 .dropdown #chord-class a,
 #chord-filter a {
-    margin: 3px;
+    margin-bottom: 3px;
     display: block;
     font-size: 16px;
     text-align: center;
@@ -302,7 +302,7 @@ div.tab > div.tab-content > div {
 
 @media (min-width: 450px) {
     div.tab > div.tab-content > div {
-        padding: 2% 4%; /* OR only 3/4% */
+        padding: 0.5% 4%; /* OR only 3/4% */
     }
 }
 

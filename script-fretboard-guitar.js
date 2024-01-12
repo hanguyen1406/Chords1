@@ -685,7 +685,7 @@ async function getDataChord() {
         .then((data) => {
             // console.log(data);
             chordActive = data["positions"];
-            $("#chord-name #noc").text(chordActive.length);
+            $("#noc").text(chordActive.length);
         })
         .catch((error) => {
             console.error("Error fetching data:", error);
