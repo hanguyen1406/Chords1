@@ -89,8 +89,8 @@ resetNote();
 resetFinger();
 function changeNoteName() {
     $("#chord-name #note").text(noteToShow);
-    $("#chord-name #suffix").text(
-        chordFileName == "major" ? "" : chordFileName
+    $("#suffix").text(
+        chordFileName == "major" ? "" : chordFileName.replace("_", "/")
     );
 
     $("#chord-name #speak").text(
@@ -481,7 +481,7 @@ $(".wrapper #note").on("click", () => {
 });
 
 //show chord
-$(".wrapper #chord").on("click",async () => {
+$(".wrapper #chord").on("click", async () => {
     // $("").css("visibility", "unset");
     $(".dropdown #chord-class").animate(
         {
@@ -494,7 +494,7 @@ $(".wrapper #chord").on("click",async () => {
     );
     //lock fretboard
     $("div.fretboard").css({ overflow: "hidden", "padding-right": "10px" });
-
+    menuItem.eq(0).click();
     $(".tab-content #chord-name b").animate({ opacity: 1 }, 500);
     floatingMenu = "chord";
     currentFileName();
@@ -508,35 +508,20 @@ $(".wrapper #chord").on("click",async () => {
 
 //function for display popup menu
 var popupCt = $(".tab-content #popup-ct"),
-    chordFilter = $("#chord-filter"),
-    nol = 0;
+    nol = 0,
+    menuItem = $("#chord-class a"),
+    filter = {},
+    currentChooser = 0;
 function showPopupMenu(id, title) {
     $(".tab-content #popup-menu").css("display", "block");
     popupCt.html("");
-    chordFilter.html("");
-    // console.log(index);
+    // console.log(currentChooser);
     $("#title-popup").text(noteToShow + "(" + title.toLowerCase() + ")");
     var exclude,
-        slashChord = true;
+        slashChord = true,
+        duplicate = false;
 
-    if (id < 4) {
-        // console.log("first");
-        [`All`, "Major", "Minor", "Sus", "Slash Chords"].forEach((i, index) => {
-            chordFilter.append(
-                `<a onclick="filterChord(${index}, '${title}', '${i}')" href="#">${i}</a>`
-            );
-        });
-    } else {
-        // console.log("second");
-        [`All`, "Basic", "6", "7", "Maj7"].forEach((i, index) => {
-            chordFilter.append(
-                `<a onclick="filterChord(${index}, '${title}', '${i}')" href="#">${i}</a>`
-            );
-        });
-    }
-    chordFilter.children("a:first").css({ "background-color": "green" });
     nol = 0;
-
     switch (id) {
         case 0:
             exclude = [""];
@@ -550,97 +535,78 @@ function showPopupMenu(id, title) {
         case 3:
             exclude = ["maj7"];
             break;
-        case 4:
-            exclude = ["maj"];
-            break;
-        case 5:
-            exclude = ["min"];
-            break;
-        case 6:
-            exclude = ["sus"];
-            break;
-        case 7:
-            exclude = [""];
-            slashChord = false;
-            n = notes.e[nol];
 
-            if (n != noteToShow) {
-                for (let i of sortedWords) {
-                    if (exclude.some((substring) => i.includes(substring))) {
-                        i = i + "_" + n.toLowerCase();
-                        $(".tab-content #popup-ct").append(
-                            `<a onclick="changeFileName('${i}')" href="#">${i}</a>`
-                        );
-                    }
-                }
-            }
-            $(".tab-content #popup-ct").append(
-                `<div id="load-more"><b>Load more</b></div>`
-            );
+            // $("#load-more").on("click", () => {
+            //     n = notes.e[++nol];
 
-            console.log(nol);
-
-            $("#load-more").on("click", () => {
-                console.log("hii");
-                n = notes.e[++nol];
-
-                if (n != noteToShow) {
-                    for (let i of sortedWords) {
-                        if (
-                            exclude.some((substring) => i.includes(substring))
-                        ) {
-                            i = i + "_" + n.toLowerCase();
-                            $("#load-more").before(
-                                `<a onclick="changeFileName('${i}')" href="#">${i}</a>`
-                            );
-                        }
-                    }
-                }
-            });
+            //     if (n != noteToShow) {
+            //         for (let i of sortedWords) {
+            //             if (
+            //                 exclude.some((substring) => i.includes(substring))
+            //             ) {
+            //                 i = i + "_" + n.toLowerCase();
+            //                 $("#load-more").before(
+            //                     `<a onclick="changeFileName('${i}')" href="#">${i}</a>`
+            //                 );
+            //             }
+            //         }
+            //     }
+            // });
 
             break;
 
         default:
             break;
     }
+    for (let i = 0; i < 8; i++) {
+        menuItem.eq(i).removeClass("on");
+    }
+    menuItem.eq(id).addClass("on");
+
     if (slashChord) {
         for (let i of sortedWords) {
             if (exclude.some((substring) => i.includes(substring))) {
-                $(".tab-content #popup-ct").append(
+                popupCt.append(
                     `<a onclick="changeFileName('${i}')" href="#">${i}</a>`
                 );
             }
         }
     }
-    $("#popup-ct").scrollTop(0);
+    popupCt.scrollTop(0);
     $(".tab-content #popup-menu").animate({ opacity: 1 }, 200);
 }
 
-function filterChord(i, first, second) {
-    $("#popup-ct").scrollTop(0);
-    chordFilter.children("a").css({ "background-color": "#276091" });
-    chordFilter.children("a").eq(i).css({ "background-color": "green" });
-
-    if (second.split(" ")[0] == "All") {
-        $("#popup-ct a").css({ display: "unset" });
-        // console.log(second.split(" "));
-    } else if (second == "Slash Chords") {
-        console.log("slash chord");
+function filterChord(i, first) {
+    popupCt.scrollTop(0);
+    if (!menuItem.eq(i).hasClass("on")) {
+        for (let j = 4; j < 8; j++) {
+            menuItem.eq(j).removeClass("on");
+        }
+        menuItem.eq(i).addClass("on");
     } else {
-        $("#popup-ct a").each((i, elem) => {
-            var e = $(elem);
-            if (!e.text().includes(second.slice(0, 3).toLowerCase())) {
-                e.css({ display: "none" });
-            } else e.css({ display: "unset" });
+        menuItem.eq(i).removeClass("on");
+    }
+
+    if (menuItem.eq(i).hasClass("on")) {
+        popupCt.children('a').each((index, e) => {
+            if (i < 7) {
+                $(e).css({ display: "unset" });
+                if (!$(e).text().includes(first)) {
+                    $(e).css({ display: "none" });
+                }
+                // console.log(filter);
+            }
         });
+    } else {
     }
 }
 
 async function changeFileName(fileName) {
+    // console.log(fileName)
     chordFileName = fileName;
     await getDataChord();
     showNoteMode();
-    $("#popup-menu").css("display", "none");
+    // $("#popup-menu").css("display", "none");
 }
 
 //event for hide popup menu
@@ -813,3 +779,10 @@ $(document).ready(function () {
         $(this).parent().find(".tab-a").addClass("active-a");
     });
 });
+
+// menuItem.each((index, e) => {
+//     console.log(e);
+//     if (index < 4) {
+//         $(e).css({ backgroundColor: "#2f7d78" });
+//     }
+// });

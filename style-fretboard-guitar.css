@@ -32,7 +32,7 @@ h1 {
 #popup-ct {
     overflow: hidden scroll;
     position: relative;
-    max-height: 175px;
+    max-height: 117px;
     display: flex;
     flex-wrap: wrap;
     padding-bottom: 5px;
@@ -88,23 +88,21 @@ h1 {
     cursor: pointer;
     font-size: 20px;
 }
-
+#note {
+    font-size: 25px;
+}
 .tab-content #popup-menu {
-    width: 90%;
-    max-width: 300px;
-    height: 300px;
-    position: absolute;
+    width: 320px;
+    height: 200px;
     background-color: rgb(238, 238, 238);
-    z-index: 6;
-    top: 70%;
-    left: 50%;
-    transform: translate(-50%, -50%);
     border-radius: 10px;
     opacity: 0;
     box-shadow: rgba(0, 0, 0, 0.19) 0px 10px 20px,
         rgba(0, 0, 0, 0.23) 0px 6px 6px;
-    display: none;
+    display: inline;
+    position:relative;
 }
+
 #load-more {
     width: 300px;
     text-align: center;
@@ -200,10 +198,10 @@ h1 {
 }
 #chord-name {
     font-family: "Times New Roman", Times, serif;
-    width: fit-content;
-    display: inline;
-    top: -8px;
-    position:relative
+    width: 100%;
+    top: -11px;
+    position:relative;
+    
 }
 #chord-name #note {
     font-size: 40px;
@@ -276,8 +274,9 @@ h1 {
     padding-left: 27px;
 }
 #speak {
-    top: -10px;
+    /* top: -12px; */
     position: relative;
+    width:fit-content
 }
 .fretboard::-webkit-scrollbar {
     width: 10px;

@@ -4,6 +4,8 @@
 }
 .dropdown #chord-class {
     visibility: hidden;
+    width: fit-content;
+    display: inline-block;
 }
 #chord-filter {
     display: flex;
@@ -11,14 +13,12 @@
     flex-wrap: wrap; /* Allows items to wrap onto the next line */
     gap: 5px;
 }
-.dropdown #chord-class a,
-#chord-filter a {
+.dropdown #chord-class a {
     margin-bottom: 3px;
     display: block;
     font-size: 16px;
     text-align: center;
     border-radius: 11px;
-    background-color: #276091;
     color: white;
     padding: 0px 5px 0px 5px;
     text-decoration: none;
@@ -28,7 +28,15 @@
     width: fit-content;
     height: fit-content;
 }
-
+.dropdown #chord-class #first a {
+    background-color: #00a187;
+}
+.dropdown #chord-class #second a {
+    background-color: #276091;
+}
+.dropdown #chord-class .on {
+    background-color: green !important
+}
 /* css for menu choose */
 .dropbtn {
     background-color: #4caf50;
@@ -112,13 +120,13 @@ div.tab {
     width: 100%;
     max-width: 800px;
     height: fit-content;
-    padding-bottom: 70px;
     background: #fff;
-    margin: 10px auto 50px; /* TMP */
     border: 2.5px solid #bbb;
     border-radius: 9px;
     overflow: hidden;
     content-visibility: auto;
+    padding-bottom: 20px;
+    margin: 2% auto;
 }
 
 @media (hover: none) {
