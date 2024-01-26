@@ -11,7 +11,14 @@
     padding: 0px;
     list-style-type: none;
 }
-
+.btn {
+    box-shadow: rgba(60, 64, 67, 0.3) 0px 1px 2px 0px, rgba(60, 64, 67, 0.15) 0px 2px 6px 2px;
+    font-size: 17px;
+    border-radius: 15px;
+    margin: 5px 0;
+    background-color: #b4cbc4;
+    cursor: pointer;
+}
 body {
     background: rgb(238, 238, 238);
     font-family: "Source Sans Pro", sans-serif;
@@ -32,12 +39,16 @@ h1 {
 #popup-ct {
     overflow: hidden scroll;
     position: relative;
-    max-height: 117px;
+    max-height: 165px;
     display: flex;
     flex-wrap: wrap;
     padding-bottom: 5px;
 }
-
+@media only screen and (max-width: 436px) {
+    #popup-menu .tab-container .tab-menu ul {
+        padding-top: 5px;
+    }
+}
 #popup-ct a {
     display: block;
     height: fit-content;
@@ -89,18 +100,20 @@ h1 {
     font-size: 20px;
 }
 #note {
-    font-size: 25px;
+    font-size: 30px;
 }
+
 .tab-content #popup-menu {
-    width: 320px;
+    width: 95%;
     height: 200px;
     background-color: rgb(238, 238, 238);
     border-radius: 10px;
     opacity: 0;
     box-shadow: rgba(0, 0, 0, 0.19) 0px 10px 20px,
         rgba(0, 0, 0, 0.23) 0px 6px 6px;
-    display: inline;
+    display: inline-block;
     position:relative;
+    top: -20px
 }
 
 #load-more {
@@ -199,7 +212,7 @@ h1 {
 #chord-name {
     font-family: "Times New Roman", Times, serif;
     width: 100%;
-    top: -11px;
+    top: -9px;
     position:relative;
     
 }

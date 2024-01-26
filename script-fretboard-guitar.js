@@ -86,6 +86,7 @@ var noteToSpeak = {
 };
 var swMinor = $("#sw-minor small");
 //render notes and fingers
+var minorBtn = $("#sw-minor input[type=checkbox]");
 resetNote();
 resetFinger();
 function changeNoteName() {
@@ -101,16 +102,15 @@ function changeNoteName() {
 function goCurrentFret() {
     changeNoteName();
     if (currentFret < 3) currentFret = 1;
-    // console.log("fret: " + currentFret);
-    document
-        .querySelector("#fret" + (currentFret - 1))
-        .scrollIntoView({ behavior: "smooth" });
+    var element = document.querySelector("#fret" + (currentFret - 1));
+    document.querySelector(`.fretboard`).scrollTop = element.offsetTop;
 }
 
 $(".dropdown #down").click(function () {
     if (!canClick) {
         return false;
     }
+
     if (floatingMenu == "chord") {
         chordVersion++;
         if (chordVersion == chordActive.length) chordVersion = 0;
@@ -174,7 +174,17 @@ $(".dropdown #up").click(function () {
     }, slideSpeed + 20);
     return false;
 });
-
+const changeStatus = (id) => {
+    fretOrFinger = ["fret", "finger", "interval"][id];
+    $("#status .btn").removeClass("on");
+    $("#status .btn").eq(id).addClass("on");
+    if (id == 0) {
+        showNoteMode();
+    } else if (id == 1) {
+        showFingerMode();
+    } else if (id == 2) {
+    }
+};
 function convToDec(char) {
     if (!isNaN(char)) return char;
 
@@ -190,10 +200,9 @@ const showNoteMode = () => {
     // console.log("chord version: " + chordVersion);
     currentFret = 24;
     canClick = false;
-    $("li[dot-number]").animate({ opacity: 0 }, 500);
     if (chordActive) {
         // console.log(chordActive);
-        allNoteElement.animate({ opacity: 0 }, 500);
+        resetNote();
         const notesClassName = [
             ".mask.low-e",
             ".mask.a",
@@ -267,7 +276,6 @@ const showNoteMode = () => {
         }
         goCurrentFret();
     } else {
-        allNoteElement.animate({ opacity: 1 }, 500);
     }
     setTimeout(() => {
         canClick = true;
@@ -275,7 +283,6 @@ const showNoteMode = () => {
 };
 
 function showNotes(noteToShow) {
-    // $(".guitar-neck .compartment-number").animate({ opacity: 0 }, 500);
     $("[dot-number]").animate({ opacity: 0 }, 500);
     if (noteToShow == "All") {
         $(".guitar-neck .notes li").animate({ opacity: 1 }, 500);
@@ -301,7 +308,7 @@ function convToDec(char) {
 const showFingerMode = () => {
     // console.log(chordActive);
     currentFret = 24;
-    allNoteElement.animate({ opacity: 0 }, 500);
+    resetFinger();
     if (chordActive) {
         // console.log(chordActive);
         $("[dot-number]").animate({ opacity: 0 }, 500);
@@ -388,7 +395,8 @@ async function resetNote() {
 
 function init() {
     $("ul.compartment-number").text("");
-    $(".mask.low-e ul").text("");
+    $(".mask ul").text("");
+    $(".red-dot ul").text("");
     for (let i = 1; i <= 24; i++) {
         $("ul.compartment-number").append(`<li>${i}</li>`);
     }
@@ -458,7 +466,6 @@ function init() {
     }
 }
 init();
-var allNoteElement = $(".guitar-neck li[note-number]");
 //show notes
 $(".wrapper #note").on("click", () => {
     $(".tab-content #popup-menu").animate({ opacity: 0 }, 500);
@@ -473,7 +480,6 @@ $(".wrapper #note").on("click", () => {
 
 //show chord
 $(".wrapper #chord").on("click", async () => {
-    // $("").css("visibility", "unset");
     $(".dropdown #chord-class").animate(
         {
             opacity: 1,
@@ -485,10 +491,11 @@ $(".wrapper #chord").on("click", async () => {
     );
     //lock fretboard
     $("div.fretboard").css({ overflow: "hidden", "padding-right": "10px" });
-    menuItem.eq(0).click();
+    // menuItem.eq(0).click();
     $(".tab-content #chord-name b").animate({ opacity: 1 }, 500);
     floatingMenu = "chord";
-    currentFileName();
+    resetNote();
+    resetFinger();
     await getDataChord();
     if (fretOrFinger == "finger") {
         showFingerMode();
@@ -504,7 +511,7 @@ var popupCt = $(".tab-content #popup-ct"),
     filter = {},
     currentChooser = 0;
 function showPopupMenu(id, title) {
-    $(".tab-content #popup-menu").css("display", "block");
+    $(".tab-content #popup-menu").css("display", "inline-block");
     popupCt.html("");
     // console.log(currentChooser);
     $("#title-popup").text(noteToShow + "(" + title.toLowerCase() + ")");
@@ -593,20 +600,14 @@ function filterChord(i, first) {
 }
 
 async function changeFileName(fileName) {
-    // console.log(fileName)
     chordFileName = fileName;
+    if (minorChecker(chordFileName)) {
+        minorBtn.prop("checked", true);
+    } else {
+        minorBtn.prop("checked", false);
+    }
     await getDataChord();
     showNoteMode();
-    var ct = window
-        .getComputedStyle(swMinor[0], "::after")
-        .getPropertyValue("content")
-        .slice(1, -1);
-    console.log(ct);
-    if (minorChecker(fileName) && ct == "Major") {
-        swMinor.click();
-    } else if (!minorChecker(fileName) && ct == "Minor") {
-        swMinor.click();
-    }
 
     // $("#popup-menu").css("display", "none");
 }
@@ -660,13 +661,6 @@ async function getDataChord() {
         });
     chordVersion = 0;
 }
-const currentFileName = () => {
-    // const element = $("#sw-minor small");
-    const afterContent = window
-        .getComputedStyle(swMinor[0], "::after")
-        .getPropertyValue("content");
-    console.log(afterContent.toLocaleLowerCase().slice(1, -1));
-};
 
 const minorChecker = (chord) => {
     return (
@@ -679,22 +673,22 @@ const minorChecker = (chord) => {
 $(".dropdown #sw-minor input").change(async () => {
     // chordFileName = chordFileName == "major" ? "minor" : "major";
     // currentFileName();
-    console.log(chordFileName);
     if (minorChecker(chordFileName)) {
-        // console.log("thu");
-        if (chordFileName == "minor") {
-            chordFileName = "major";
-        } else chordFileName = chordFileName.slice(1);
+        if (chordFileName == "minor") chordFileName = "major";
+        else {
+            if (!sortedWords.includes(chordFileName.slice(1))) {
+                alert("Không có hợp âm " + noteToShow + chordFileName.slice(1));
+                minorBtn.prop("checked", true);
+            } else chordFileName = chordFileName.slice(1);
+        }
     } else {
-        // console.log("truong");
-        if (chordFileName == "major") {
-            chordFileName = "minor";
-        } else if (sortedWords.includes("m" + chordFileName)) {
-            chordFileName = "m" + chordFileName;
-        } else {
-            alert("Không có bản Minor cho hợp âm này!");
-            // swMinor.click()
-        } 
+        if (chordFileName == "major") chordFileName = "minor";
+        else {
+            if (!sortedWords.includes("m" + chordFileName)) {
+                alert("Không có hợp âm " + noteToShow + "m" + chordFileName);
+                minorBtn.prop("checked", false);
+            } else chordFileName = "m" + chordFileName;
+        }
     }
 
     await getDataChord();
@@ -796,7 +790,7 @@ let sortedWords = [
     "maj7sus4#5",
     "maj7sus2sus4",
 ];
-$("#sw-minor small").click();
+// $("#sw-minor small").click();
 $(document).ready(function () {
     $(".tab-a").click(function () {
         $(".ta").removeClass("tab-active");

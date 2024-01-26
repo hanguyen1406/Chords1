@@ -135,23 +135,28 @@
                             </div>
                         </div>
                         <div class="dropdown" id="selector">                     
-                            <label id="sw-minor" class="switch">
+                            <!-- <label id="sw-minor" class="switch">
                                 <input type="checkbox">
                                 <small></small>
                             </label>
                             <label id="sw-finger" class="switch">
                                 <input type="checkbox">
                                 <small></small>
-                            </label>
+                            </label> -->
+                            <div id="status">
+                                <div onclick="changeStatus(0)" class="btn on">Note</div>
+                                <div onclick="changeStatus(1)" class="btn">Finger</div>
+                                <div onclick="changeStatus(2)" class="btn">Interval</div>
+                            </div>
                             <label id="sw-tone" class="switch">
                                 <input type="checkbox">
                                 <small></small>
                             </label>
     
                             <br>
-                            <a id="up" href="#"><img style="width: 29px;" src="./img/up-arrow.png"/></a>
+                            <a id="up" href=""><img style="width: 29px;" src="./img/up-arrow.png"/></a>
                             <!-- <br> -->
-                            <a id="down" href="#fret0"><img style="width: 29px;" src="./img/down-arrow.png"/></a><br>
+                            <a id="down" href=""><img style="width: 29px;" src="./img/down-arrow.png"/></a><br>
                             <div id="chord-class">
                                 <div id="first">
                                     <a onclick="showPopupMenu(0, 'Basic')" href="#">Basic</a>
@@ -165,43 +170,39 @@
                                     <a onclick="filterChord(6, 'sus')" href="#">Sus</a>
                                     <a onclick="filterChord(7, 'Slash-chords')" href="#">Slash<br>Chords</a>
                                 </div>
-                                (#<span id="chord-version">1</span>/<span id="noc"></span>)
+                                
+                            </div>
+                        </div>                       
+                    </div>
+                    <div style="font-family: 'Times New Roman', Times, serif;">
+                        <b id="note">C</b><span id="suffix"></span>
+                        <div id="chord-name">
+                            <span id="speak">Đô Trưởng</span>
+                        </div>
+                        <div style="position: relative; top: -15px;">
+                            Cách bấm #<span id="chord-version">1</span>/<span id="noc"></span>
+                        </div>
+                    </div>
+                    <div id="popup-menu">
+                        <div class="tab-container">
+                            <div class="tab-menu">
+                            <ul>
+                                <li><a href="#" class="tab-a active-a" data-id="tab1">Name</a></li>
+                                <li><a href="#" class="tab-a" data-id="tab2">Diagram</a></li>
+                        
+                            </ul>
+                            </div>
+                            <!--end of tab-menu-->
+                            <div class="ta tab-active" data-id="tab1">
+                            <div id="popup-ct"></div>
+
+                            </div>
+                            <div class="ta " data-id="tab2">
+                            <p>Display diagram chord here</p>
                             </div>
                         </div>
-                        
                     </div>
                     
-                    <div style="display: flex; justify-content: center; padding-bottom: 10px; padding-top: 5px;">
-                        <div id="popup-menu">
-                            <!-- <b id="title-popup"></b> -->
-                                <div style="font-family: 'Times New Roman', Times, serif; height: 50px;">
-                                    <b id="note">C</b><span id="suffix"></span>
-                                    <div id="chord-name">
-                                        <span id="speak">Đô Trưởng</span>
-                                    </div>
-                                    
-                                </div>
-                            <!-- <a id="exit" href="#" class="position-right"><img style="width: 15px;" src="./img/exit.png"/></a> -->
-                            <hr>
-                            <div class="tab-container">
-                                <div class="tab-menu">
-                                <ul>
-                                    <li><a href="#" class="tab-a active-a" data-id="tab1">Name</a></li>
-                                    <li><a href="#" class="tab-a" data-id="tab2">Diagram</a></li>
-                            
-                                </ul>
-                                </div>
-                                <!--end of tab-menu-->
-                                <div class="ta tab-active" data-id="tab1">
-                                <div id="popup-ct"></div>
-
-                                </div>
-                                <div class="ta " data-id="tab2">
-                                <p>Display diagram chord here</p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
 
                 </div>
                 <div id="#Tab1-Q2"></div>

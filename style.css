@@ -34,8 +34,8 @@
 .dropdown #chord-class #second a {
     background-color: #276091;
 }
-.dropdown #chord-class .on {
-    background-color: green !important
+.on {
+    background-color: green !important;
 }
 /* css for menu choose */
 .dropbtn {
@@ -125,7 +125,7 @@ div.tab {
     border-radius: 9px;
     overflow: hidden;
     content-visibility: auto;
-    padding-bottom: 20px;
+    padding-bottom: 38px;
     margin: 2% auto;
 }
 
