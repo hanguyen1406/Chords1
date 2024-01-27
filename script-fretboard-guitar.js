@@ -178,11 +178,13 @@ const changeStatus = (id) => {
     fretOrFinger = ["fret", "finger", "interval"][id];
     $("#status .btn").removeClass("on");
     $("#status .btn").eq(id).addClass("on");
-    if (id == 0) {
-        showNoteMode();
-    } else if (id == 1) {
-        showFingerMode();
-    } else if (id == 2) {
+    if (floatingMenu == "chord") {
+        if (id == 0) {
+            showNoteMode();
+        } else if (id == 1) {
+            showFingerMode();
+        } else if (id == 2) {
+        }
     }
 };
 function convToDec(char) {
@@ -203,6 +205,7 @@ const showNoteMode = () => {
     if (chordActive) {
         // console.log(chordActive);
         resetNote();
+        resetFinger();
         const notesClassName = [
             ".mask.low-e",
             ".mask.a",
@@ -308,10 +311,10 @@ function convToDec(char) {
 const showFingerMode = () => {
     // console.log(chordActive);
     currentFret = 24;
-    resetFinger();
     if (chordActive) {
         // console.log(chordActive);
-        $("[dot-number]").animate({ opacity: 0 }, 500);
+        resetNote();
+        resetFinger();
         const notesClassName = [".low-e", ".a", ".d", ".g", ".b", ".high-e"];
         resetOpenNote();
         var fingers = [...chordActive[chordVersion]["fingers"]];
@@ -480,6 +483,8 @@ $(".wrapper #note").on("click", () => {
 
 //show chord
 $(".wrapper #chord").on("click", async () => {
+    menuItem.eq(0).click();
+
     $(".dropdown #chord-class").animate(
         {
             opacity: 1,
@@ -510,14 +515,14 @@ var popupCt = $(".tab-content #popup-ct"),
     menuItem = $("#chord-class a"),
     filter = {},
     currentChooser = 0;
+var exclude,
+    slashChord = true,
+    duplicate = false;
 function showPopupMenu(id, title) {
     $(".tab-content #popup-menu").css("display", "inline-block");
     popupCt.html("");
     // console.log(currentChooser);
     $("#title-popup").text(noteToShow + "(" + title.toLowerCase() + ")");
-    var exclude,
-        slashChord = true,
-        duplicate = false;
 
     nol = 0;
     switch (id) {
@@ -573,6 +578,16 @@ function showPopupMenu(id, title) {
     popupCt.scrollTop(0);
     $(".tab-content #popup-menu").animate({ opacity: 1 }, 200);
 }
+const resetMenuCt = () => {
+    popupCt.text("");
+    for (let i of sortedWords) {
+        if (exclude.some((substring) => i.includes(substring))) {
+            popupCt.append(
+                `<a onclick="changeFileName('${i}')" href="#">${i}</a>`
+            );
+        }
+    }
+};
 
 function filterChord(i, first) {
     popupCt.scrollTop(0);
@@ -586,16 +601,49 @@ function filterChord(i, first) {
     }
 
     if (menuItem.eq(i).hasClass("on")) {
-        popupCt.children("a").each((index, e) => {
-            if (i < 7) {
+        resetMenuCt();
+        if (i < 7) {
+            popupCt.children("a").each((index, e) => {
                 $(e).css({ display: "unset" });
                 if (!$(e).text().includes(first)) {
                     $(e).css({ display: "none" });
                 }
-                // console.log(filter);
-            }
-        });
+            });
+        } else if (i == 7) {
+            var n = notes.e[nol % 12].toLowerCase();
+            popupCt.children("a").each((index, e) => {
+                text = $(e).text();
+                $(e).text(text + "/" + n);
+                if (n != noteToShow) {
+                    $(e).attr("onclick", `changeFileName('${text}_${n}')`);
+                }
+            });
+            $("#popup-ct").append(`<div id="load-more"><b>Load more</b></div>`);
+            $("#load-more").on("click", () => {
+                n = notes.e[++nol];
+
+                if (n != noteToShow) {
+                    for (let i of sortedWords) {
+                        if (
+                            exclude.some((substring) => i.includes(substring))
+                        ) {
+                            i = i + "_" + n.toLowerCase();
+                            $("#load-more").before(
+                                `<a onclick="changeFileName('${i}')" href="#">${i.replace(
+                                    "_",
+                                    "/"
+                                )}</a>`
+                            );
+                        }
+                    }
+                }
+            });
+        }
     } else {
+        popupCt.children("a").css({ display: "unset" });
+        if (i == 7) {
+            resetMenuCt();
+        }
     }
 }
 
@@ -633,8 +681,11 @@ $("#sw-tone input").change(() => {
     resetNote();
     resetFinger();
     if (floatingMenu == "chord") {
-        // console.log("switch chord");
-        showNoteMode();
+        if (fretOrFinger == "finger") {
+            showFingerMode();
+        } else {
+            showNoteMode();
+        }
         barres.animate({ top: `${currentFret * 80}px` }, 500);
     } else if (floatingMenu == "note") {
         showNotes(chordTab1[currentTab]);
@@ -643,13 +694,13 @@ $("#sw-tone input").change(() => {
 });
 
 async function getDataChord() {
-    const encodedChordFileName = encodeURIComponent(chordFileName);
+    // const encodedChordFileName = encodeURIComponent(chordFileName);
     const url = `./chords/${noteToShow.replace(
         "#",
         "sharp"
-    )}/${encodedChordFileName}.json`;
-    // console.log(url);
-    await fetch(url)
+    )}/${chordFileName}.json`;
+    console.log(url);
+    await fetch(encodeURIComponent(url))
         .then((response) => response.json())
         .then((data) => {
             // console.log(data);
@@ -790,7 +841,6 @@ let sortedWords = [
     "maj7sus4#5",
     "maj7sus2sus4",
 ];
-// $("#sw-minor small").click();
 $(document).ready(function () {
     $(".tab-a").click(function () {
         $(".ta").removeClass("tab-active");

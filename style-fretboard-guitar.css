@@ -113,11 +113,11 @@ h1 {
         rgba(0, 0, 0, 0.23) 0px 6px 6px;
     display: inline-block;
     position:relative;
-    top: -20px
+    top: -28px
 }
 
 #load-more {
-    width: 300px;
+    width: 100%;
     text-align: center;
 }
 #popup-menu .tab-container .tab-menu ul {
