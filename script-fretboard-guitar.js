@@ -174,6 +174,17 @@ $(".dropdown #up").click(function () {
     }, slideSpeed + 20);
     return false;
 });
+
+function convToDec(char) {
+    if (!isNaN(char)) return char;
+
+    var charCodeOfG = "G".charCodeAt(0);
+    var charCode = char.charCodeAt(0);
+
+    var decimalValue = charCode - charCodeOfG + 16;
+    return decimalValue;
+}
+
 const changeStatus = (id) => {
     fretOrFinger = ["fret", "finger", "interval"][id];
     $("#status .btn").removeClass("on");
@@ -306,7 +317,8 @@ function convToDec(char) {
     var charCode = char.charCodeAt(0);
 
     var decimalValue = charCode - charCodeOfG + 16;
-    return decimalValue;
+
+    return char == 'X' ? 'x' : decimalValue;
 }
 const showFingerMode = () => {
     // console.log(chordActive);
@@ -517,10 +529,12 @@ var popupCt = $(".tab-content #popup-ct"),
     currentChooser = 0;
 var exclude,
     slashChord = true,
-    duplicate = false;
-function showPopupMenu(id, title) {
+    duplicate = false,
+    diagram = $("#diagram");
+async function showPopupMenu(id, title) {
     $(".tab-content #popup-menu").css("display", "inline-block");
     popupCt.html("");
+    diagram.html("");
     // console.log(currentChooser);
     $("#title-popup").text(noteToShow + "(" + title.toLowerCase() + ")");
 
@@ -539,25 +553,6 @@ function showPopupMenu(id, title) {
             exclude = ["maj7"];
             break;
 
-            // $("#load-more").on("click", () => {
-            //     n = notes.e[++nol];
-
-            //     if (n != noteToShow) {
-            //         for (let i of sortedWords) {
-            //             if (
-            //                 exclude.some((substring) => i.includes(substring))
-            //             ) {
-            //                 i = i + "_" + n.toLowerCase();
-            //                 $("#load-more").before(
-            //                     `<a onclick="changeFileName('${i}')" href="#">${i}</a>`
-            //                 );
-            //             }
-            //         }
-            //     }
-            // });
-
-            break;
-
         default:
             break;
     }
@@ -572,12 +567,40 @@ function showPopupMenu(id, title) {
                 popupCt.append(
                     `<a onclick="changeFileName('${i}')" href="#">${i}</a>`
                 );
+
+                const url = `./chords/${noteToShow.replace(
+                    "#",
+                    "sharp"
+                )}/${i}.json`;
+                var p, f;
+                await fetch(encodeURIComponent(url))
+                    .then((response) => response.json())
+                    .then((data) => {
+                        p = hexToDec(data['positions'][0]['frets'].toUpperCase());
+                        f = data['positions'][0]['fingers'].toUpperCase().replace(/0/g, '-');;
+                        console.log(p, f);
+                    })
+                    .catch((error) => {
+                        console.error("Error fetching data:", error);
+                    });
+                
+                diagram.append(
+                    `<img src='https://chordgenerator.net/${i.replace(
+                        "#",
+                        "%23"
+                    )}.png?p=${(p)}&f=${f}&s=2'/>`
+                );
             }
         }
     }
     popupCt.scrollTop(0);
     $(".tab-content #popup-menu").animate({ opacity: 1 }, 200);
 }
+
+function hexToDec(string) {
+    return string.split('').map(convToDec).join('');
+}
+
 const resetMenuCt = () => {
     popupCt.text("");
     for (let i of sortedWords) {
@@ -655,9 +678,12 @@ async function changeFileName(fileName) {
         minorBtn.prop("checked", false);
     }
     await getDataChord();
-    showNoteMode();
 
-    // $("#popup-menu").css("display", "none");
+    if (fretOrFinger == "finger") {
+        showFingerMode();
+    } else {
+        showNoteMode();
+    }
 }
 
 //event for hide popup menu
