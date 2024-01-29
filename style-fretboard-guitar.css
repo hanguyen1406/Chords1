@@ -125,6 +125,7 @@ h1 {
 #diagram img {
     margin: 5px;
     border-radius: 7px;
+    cursor: pointer;
 }
 #load-more {
     width: 100%;

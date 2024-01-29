@@ -175,16 +175,6 @@ $(".dropdown #up").click(function () {
     return false;
 });
 
-function convToDec(char) {
-    if (!isNaN(char)) return char;
-
-    var charCodeOfG = "G".charCodeAt(0);
-    var charCode = char.charCodeAt(0);
-
-    var decimalValue = charCode - charCodeOfG + 16;
-    return decimalValue;
-}
-
 const changeStatus = (id) => {
     fretOrFinger = ["fret", "finger", "interval"][id];
     $("#status .btn").removeClass("on");
@@ -198,15 +188,6 @@ const changeStatus = (id) => {
         }
     }
 };
-function convToDec(char) {
-    if (!isNaN(char)) return char;
-
-    var charCodeOfG = "G".charCodeAt(0);
-    var charCode = char.charCodeAt(0);
-
-    var decimalValue = charCode - charCodeOfG + 16;
-    return decimalValue;
-}
 
 const showNoteMode = () => {
     if (!canClick) return;
@@ -578,14 +559,14 @@ async function showPopupMenu(id, title) {
                     .then((data) => {
                         p = hexToDec(data['positions'][0]['frets'].toUpperCase());
                         f = data['positions'][0]['fingers'].toUpperCase().replace(/0/g, '-');;
-                        console.log(p, f);
+                        // console.log(p, f);
                     })
                     .catch((error) => {
                         console.error("Error fetching data:", error);
                     });
                 
                 diagram.append(
-                    `<img src='https://chordgenerator.net/${i.replace(
+                    `<img onclick="changeFileName('${i}')" src='https://chordgenerator.net/${i.replace(
                         "#",
                         "%23"
                     )}.png?p=${(p)}&f=${f}&s=2'/>`
@@ -598,7 +579,7 @@ async function showPopupMenu(id, title) {
 }
 
 function hexToDec(string) {
-    return string.split('').map(convToDec).join('');
+    return string.split('').map(convToDec).join('-');
 }
 
 const resetMenuCt = () => {
