@@ -133,4 +133,4 @@ document.querySelectorAll(".tab").forEach((x) => {
         e.preventDefault();
     });
 });
-showNotes("C");
+// showNotes("C");

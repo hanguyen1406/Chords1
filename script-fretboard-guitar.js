@@ -1,4 +1,5 @@
 var slideSpeed = 300;
+const notesClassName = [".low-e", ".a", ".d", ".g", ".b", ".high-e"];
 var chordTab1 = [
     "C",
     "C#",
@@ -34,7 +35,7 @@ var switchGuitar = false;
 var currentTab = 0;
 var chordVersion = 0;
 var chordSymbol = "C";
-var floatingMenu = "note";
+var floatingMenu = "chord";
 var currentFret = 1;
 var chordFileName = "major";
 var fretOrFinger = "fret";
@@ -54,6 +55,21 @@ var note2 = {
     b: ["B", "C", "Db", "D", "Eb", "E", "F", "Gb", "G", "Ab", "A", "Bb"],
 };
 var openNote = ["E", "A", "D", "G", "B", "E"];
+var scale = ["C", "D", "E", "F", "G", "A", "B"];
+var interval = [
+    "P1",
+    "m2",
+    "M2",
+    "m3",
+    "M3",
+    "P4",
+    "A4",
+    "P5",
+    "m6",
+    "M6",
+    "m7",
+    "M7",
+];
 var giang = {
     Db: "C#",
     Eb: "D#",
@@ -83,6 +99,68 @@ var noteToSpeak = {
     B: "Si",
     major: "Trưởng",
     minor: "Thứ",
+
+    "5" : "",
+    "6" : "",
+    "7" : "",
+    "9" : "",
+    "11" : "",
+    "13" : "",
+    "m6" : "",
+    "m7" : "",
+    "m9" : "",
+    "6b5" : "",
+    "7#9" : "",
+    "7b5" : "",
+    "7b9" : "",
+    "9b5" : "",
+    "aug" : "",
+    "dim" : "",
+    "m#5" : "",
+    "m11" : "",
+    "m13" : "",
+    "add9" : "",
+    "aug7" : "",
+    "aug9" : "",
+    "dim7" : "",
+    "m7#5" : "",
+    "m7b5" : "",
+    "maj7" : "",
+    "maj9" : "",
+    "mbb5" : "",
+    "sus2" : "",
+    "sus4" : "",
+    "6add9" : "",
+    "7#9b5" : "",
+    "7sus2" : "",
+    "7sus4" : "",
+    "9sus4" : "",
+    "maj11" : "",
+    "maj13" : "",
+    "majb5" : "",
+    "mmaj7" : "",
+    "mmaj9" : "",
+    "m6add9" : "",
+    "maj#11" : "",
+    "maj7b5" : "",
+    "mmaj11" : "",
+    "mmaj13" : "",
+    "sus2#5" : "",
+    "sus2b5" : "",
+    "sus4#5" : "",
+    "7sus2#5" : "",
+    "7sus4#5" : "",
+    "augmaj7" : "",
+    "augmaj9" : "",
+    "mmaj7#5" : "",
+    "mmaj7b5" : "",
+    "maj7sus2" : "",
+    "maj7sus4" : "",
+    "mmaj7bb5" : "",
+    "sus2sus4" : "",
+    "7sus2sus4" : "",
+    "maj7sus4#5" : "",
+    "maj7sus2sus4" : "",
 };
 var swMinor = $("#sw-minor small");
 //render notes and fingers
@@ -112,11 +190,14 @@ $(".dropdown #down").click(function () {
     }
 
     if (floatingMenu == "chord") {
+        initFrets();
         chordVersion++;
         if (chordVersion == chordActive.length) chordVersion = 0;
         currentFret = 24;
-
         if (fretOrFinger == "finger") showFingerMode();
+        else if(fretOrFinger == "interval") {
+            $("#status div")[2].click();
+        }
         else showNoteMode();
         $(".tab-content #chord-version").text(chordVersion + 1);
     } else {
@@ -133,7 +214,6 @@ $(".dropdown #down").click(function () {
     setTimeout(function () {
         canClick = true;
     }, slideSpeed + 20);
-
     return false;
 });
 
@@ -160,6 +240,9 @@ $(".dropdown #up").click(function () {
         if (chordVersion < 0) chordVersion = chordActive.length - 1;
 
         if (fretOrFinger == "fret") showNoteMode();
+        else if(fretOrFinger == "interval") {
+            $("#status div")[2].click();
+        }
         else showFingerMode();
         // console.log("chord version: " + chordVersion);
         $(".tab-content #chord-version").text(chordVersion + 1);
@@ -175,19 +258,106 @@ $(".dropdown #up").click(function () {
     return false;
 });
 
+const noteToMajorScale = (note) => {
+    let a = ["E", "F", "F#", "G", "G#", "A", "A#", "B", "C", "C#", "D", "D#"];
+    let res = [];
+
+    for (let i = 0; i < a.length; i++) {
+        if (a[i] === note) {
+            let j = 0;
+            while (1) {
+                res.push(a[(i + j) % 12]);
+                if (j == 4) {
+                    j -= 1;
+                }
+                j += 2;
+                if (j >= 13) {
+                    break;
+                }
+            }
+            break;
+        }
+    }
+
+    return res;
+};
+
+const noteToMinorScale = (note) => {
+    let a = ["E", "F", "F#", "G", "G#", "A", "A#", "B", "C", "C#", "D", "D#"];
+    let res = [];
+
+    for (let i = 0; i < a.length; i++) {
+        if (a[i] === note) {
+            let j = 0;
+            while (1) {
+                res.push(a[(i + j) % 12]);
+                if (j == 2 || j == 7) {
+                    j -= 1;
+                }
+                j += 2;
+                if (j >= 12) {
+                    break;
+                }
+            }
+            break;
+        }
+    }
+
+    return res;
+};
+
 const changeStatus = (id) => {
     fretOrFinger = ["fret", "finger", "interval"][id];
     $("#status .btn").removeClass("on");
     $("#status .btn").eq(id).addClass("on");
+    initFrets();
     if (floatingMenu == "chord") {
-        if (id == 0) {
+        if (id == 0 || id == 2) {
             showNoteMode();
-        } else if (id == 1) {
+        }
+        if (id == 1) {
             showFingerMode();
-        } else if (id == 2) {
+        }
+        if (id == 2) {
+            var frets = chordActive[chordVersion];
+            if(minorChecker(chordFileName)) {
+                scale = noteToMinorScale(noteToShow);
+            } else {
+                scale = noteToMajorScale(noteToShow);
+            }
+            console.log(scale);
+            console.log(fretToInterval(frets['frets']));
+
         }
     }
 };
+
+function fretToInterval(frets) {
+    res = [];
+    frets.split("")
+        .forEach((fret, i) => {
+            if (fret != "x") {
+                var note = $(
+                    `.notes ${notesClassName[i]} ul li[note-number="${convToDec(fret.toUpperCase())}"]`
+                );
+                var open = $(`.open-notes li`);
+                for (let j = 0; j < scale.length; j++) {
+                    if (scale[j] == note.text()) {
+                        if(fret == '0') {
+                            $(open[i]).text(interval[j]);
+                            console.log(open[i]);
+                        } 
+                        else {
+                            note.text(interval[j]);
+                        }
+                        res.push(interval[j]);
+                        break;
+                    }
+                }
+            }
+        });
+    return res.join("-");
+}
 
 const showNoteMode = () => {
     if (!canClick) return;
@@ -210,8 +380,8 @@ const showNoteMode = () => {
 
         [...chordActive[chordVersion]["frets"]].forEach((fret, index) => {
             // console.log(fret);
-
             if (fret == "x") {
+                ChordPlayer.state.frets[index] = null;
                 $(`#indicate ${notesClassName[index].replace(".mask", "")}`)
                     .text("")
                     .prepend(
@@ -223,6 +393,7 @@ const showNoteMode = () => {
                     })
                     .animate(500);
             } else if (fret == "0") {
+                ChordPlayer.state.frets[index] = 0;
                 $(`#indicate ${notesClassName[index].replace(".mask", "")}`)
                     .text(openNote[index])
                     .css({
@@ -236,6 +407,7 @@ const showNoteMode = () => {
             } else if (fret != "x" && fret != "0") {
                 fret = convToDec(fret.toUpperCase());
                 // console.log(fret);
+                ChordPlayer.state.frets[index] = fret;
                 var note = $(
                     `.notes ${notesClassName[index]} ul li[note-number="${fret}"]`
                 ).html();
@@ -263,6 +435,8 @@ const showNoteMode = () => {
                 ).animate({ opacity: 1 }, 500);
             }
         });
+        // ChordPlayer.displayChords();
+        // console.log(ChordPlayer.state.frets);
         if (chordActive[chordVersion]["barres"]) {
             // console.log(currentFret);
             barres.animate({ opacity: 1, top: `${currentFret * 80}px` }, 500);
@@ -388,14 +562,8 @@ async function resetNote() {
         .css({ "background-color": "#fa990f" })
         .animate({ opacity: 0 }, 500);
 }
-
-function init() {
-    $("ul.compartment-number").text("");
+function initFrets() {
     $(".mask ul").text("");
-    $(".red-dot ul").text("");
-    for (let i = 1; i <= 24; i++) {
-        $("ul.compartment-number").append(`<li>${i}</li>`);
-    }
     for (let i = 0; i < notes.e.length * 2; i++) {
         $(".mask.low-e ul").append(
             "<li note-number=" +
@@ -452,6 +620,14 @@ function init() {
                 "</li>"
         );
     }
+}
+function init() {
+    $("ul.compartment-number").text("");
+    $(".red-dot ul").text("");
+    for (let i = 1; i <= 24; i++) {
+        $("ul.compartment-number").append(`<li>${i}</li>`);
+    }
+    initFrets();
     for (let i = 0; i <= notes.e.length * 2; i++) {
         $(".red-dot.low-e ul").append(`<li dot-number="${i}">.</li>`);
         $(".red-dot.a ul").append(`<li dot-number="${i}">.</li>`);
@@ -464,42 +640,39 @@ function init() {
 init();
 //show notes
 $(".wrapper #note").on("click", () => {
-    $(".tab-content #popup-menu").animate({ opacity: 0 }, 500);
-    $("div.fretboard").css({ "overflow-y": "scroll", "padding-right": "0px" });
-    chordVersion = 0;
-    floatingMenu = "note";
-    resetNote();
-    resetFinger();
-    resetOpenNote();
-    showNotes(chordTab1[currentTab]);
+    // $(".tab-content #popup-menu").animate({ opacity: 0 }, 500);
+    // $("div.fretboard").css({ "overflow-y": "scroll", "padding-right": "0px" });
+    // chordVersion = 0;
+    // floatingMenu = "note";
+    // resetNote();
+    // resetFinger();
+    // resetOpenNote();
+    // showNotes(chordTab1[currentTab]);
 });
 
 //show chord
 $(".wrapper #chord").on("click", async () => {
-    menuItem.eq(0).click();
-
-    $(".dropdown #chord-class").animate(
-        {
-            opacity: 1,
-        },
-        100,
-        function () {
-            $(this).css("visibility", "unset");
-        }
-    );
-    //lock fretboard
-    $("div.fretboard").css({ overflow: "hidden", "padding-right": "10px" });
     // menuItem.eq(0).click();
-    $(".tab-content #chord-name b").animate({ opacity: 1 }, 500);
-    floatingMenu = "chord";
-    resetNote();
-    resetFinger();
-    await getDataChord();
-    if (fretOrFinger == "finger") {
-        showFingerMode();
-    } else {
-        showNoteMode();
-    }
+    // $(".dropdown #chord-class").animate(
+    //     {
+    //         opacity: 1,
+    //     },
+    //     100,
+    //     function () {
+    //         $(this).css("visibility", "unset");
+    //     }
+    // );
+    // $("div.fretboard").css({ overflow: "hidden", "padding-right": "10px" });
+    // $(".tab-content #chord-name b").animate({ opacity: 1 }, 500);
+    // floatingMenu = "chord";
+    // resetNote();
+    // resetFinger();
+    // await getDataChord();
+    // if (fretOrFinger == "finger") {
+    //     showFingerMode();
+    // } else {
+    //     showNoteMode();
+    // }
 });
 
 //function for display popup menu
@@ -662,7 +835,11 @@ async function changeFileName(fileName) {
 
     if (fretOrFinger == "finger") {
         showFingerMode();
-    } else {
+    }
+    else if(fretOrFinger == "interval") {
+        $("#status div")[2].click();
+    }
+    else {
         showNoteMode();
     }
 }
@@ -690,7 +867,11 @@ $("#sw-tone input").change(() => {
     if (floatingMenu == "chord") {
         if (fretOrFinger == "finger") {
             showFingerMode();
-        } else {
+        }
+        else if(fretOrFinger == "interval") {
+            $("#status div")[2].click();
+        }
+        else {
             showNoteMode();
         }
         barres.animate({ top: `${currentFret * 80}px` }, 500);
@@ -756,7 +937,11 @@ $(".dropdown #sw-minor input").change(async () => {
         chordVersion = 0;
         if (fretOrFinger == "finger") {
             showFingerMode();
-        } else {
+        }
+        else if(fretOrFinger == "interval") {
+            $("#status div")[2].click();
+        }
+        else {
             showNoteMode();
         }
     } else goToFret0();
@@ -857,11 +1042,7 @@ $(document).ready(function () {
         $(".tab-a").removeClass("active-a");
         $(this).parent().find(".tab-a").addClass("active-a");
     });
+    showNoteMode();
+    $("div.fretboard").css({ overflow: "hidden", "padding-right": "10px" });
+    showPopupMenu(0, 'Basic');
 });
-
-// menuItem.each((index, e) => {
-//     console.log(e);
-//     if (index < 4) {
-//         $(e).css({ backgroundColor: "#2f7d78" });
-//     }
-// });

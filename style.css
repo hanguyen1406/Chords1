@@ -3,7 +3,7 @@
     opacity: 0;
 }
 .dropdown #chord-class {
-    visibility: hidden;
+    /* visibility: hidden; */
     width: fit-content;
     display: inline-block;
 }
