@@ -83,6 +83,68 @@ var noteToSpeak = {
     B: "Si",
     major: "Trưởng",
     minor: "Thứ",
+
+    5: "năm",
+    6: "sáu",
+    7: "bẩy",
+    9: "chín",
+    11: "mười một",
+    13: "mười ba",
+    m6: "thứ sáu",
+    m7: "thứ bẩy",
+    m9: "thứ chín",
+    "6b5": "",
+    "7#9": "",
+    "7b5": "",
+    "7b9": "",
+    "9b5": "",
+    aug: "tăng",
+    dim: "",
+    "m#5": "",
+    m11: "thứ mười một",
+    m13: "thứ mười ba",
+    add9: "",
+    aug7: "",
+    aug9: "",
+    dim7: "",
+    "m7#5": "",
+    m7b5: "",
+    maj7: "trưởng bẩy",
+    maj9: "trưởng chín",
+    mbb5: "",
+    sus2: "",
+    sus4: "",
+    "6add9": "",
+    "7#9b5": "",
+    "7sus2": "",
+    "7sus4": "",
+    "9sus4": "",
+    maj11: "trưởng mười một",
+    maj13: "trưởng mười ba",
+    majb5: "",
+    mmaj7: "thứ trưởng bẩy",
+    mmaj9: "thứ trưởng chín",
+    m6add9: "",
+    "maj#11": "",
+    maj7b5: "",
+    mmaj11: "",
+    mmaj13: "",
+    "sus2#5": "",
+    sus2b5: "",
+    "sus4#5": "",
+    "7sus2#5": "",
+    "7sus4#5": "",
+    augmaj7: "",
+    augmaj9: "",
+    "mmaj7#5": "",
+    mmaj7b5: "",
+    maj7sus2: "",
+    maj7sus4: "",
+    mmaj7bb5: "",
+    sus2sus4: "",
+    "7sus2sus4": "",
+    "maj7sus4#5": "",
+    maj7sus2sus4: "",
 };
 var swMinor = $("#sw-minor small");
 //render notes and fingers
@@ -299,7 +361,7 @@ function convToDec(char) {
 
     var decimalValue = charCode - charCodeOfG + 16;
 
-    return char == 'X' ? 'x' : decimalValue;
+    return char == "X" ? "x" : decimalValue;
 }
 const showFingerMode = () => {
     // console.log(chordActive);
@@ -557,19 +619,23 @@ async function showPopupMenu(id, title) {
                 await fetch(encodeURIComponent(url))
                     .then((response) => response.json())
                     .then((data) => {
-                        p = hexToDec(data['positions'][0]['frets'].toUpperCase());
-                        f = data['positions'][0]['fingers'].toUpperCase().replace(/0/g, '-');;
+                        p = hexToDec(
+                            data["positions"][0]["frets"].toUpperCase()
+                        );
+                        f = data["positions"][0]["fingers"]
+                            .toUpperCase()
+                            .replace(/0/g, "-");
                         // console.log(p, f);
                     })
                     .catch((error) => {
                         console.error("Error fetching data:", error);
                     });
-                
+
                 diagram.append(
                     `<img onclick="changeFileName('${i}')" src='https://chordgenerator.net/${i.replace(
                         "#",
                         "%23"
-                    )}.png?p=${(p)}&f=${f}&s=2'/>`
+                    )}.png?p=${p}&f=${f}&s=2'/>`
                 );
             }
         }
@@ -579,7 +645,7 @@ async function showPopupMenu(id, title) {
 }
 
 function hexToDec(string) {
-    return string.split('').map(convToDec).join('-');
+    return string.split("").map(convToDec).join("-");
 }
 
 const resetMenuCt = () => {
